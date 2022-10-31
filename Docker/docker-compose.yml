@@ -1,0 +1,49 @@
+version: '3'
+
+services: 
+  
+  #Not sure about nginx here, need to look at documentation
+  nginx: 
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+     - "80:80"
+    volumes:
+      - ../api:/var/www/dashboard/api:delegated
+      # - ./nginx/api.conf:/etc/nginx/conf.d/api.conf:delegated
+      # - ./nginx/logs/:/var/log/nginx:delegated
+    depends_on:
+      - mysql
+      - reactjs
+    restart: always
+  
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql:delegated
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    restart: always
+
+  reactjs:
+    build: 
+      context: ../reactjs
+      dockerfile: Dockerfile
+    restart: always
+    command: "npm start"
+    volumes:
+      - ../reactjs/dashboard:/var/www/dashboard
+      - ../reactjs/dashboard/node_modules:/var/www/dashboard/node_modules
+    ports:
+      - "3000:3000"
+
+  maildev:
+    image: maildev/maildev
+    restart: always
+    ports:
+      - "1080:1080"
+      - "1025:1025"
