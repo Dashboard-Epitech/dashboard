@@ -14,8 +14,7 @@ mysql-console:
 	- docker exec -it $(DOCKER_MYSQL) mysql -u root -p
 
 build: 
-	- cd dashboard/api && ./gradlew build
-	- cp dashboard/api/build/libs/api.war Docker/tomcat
+	- cd dashboard/api && ./gradlew build && cp dashboard/api/build/libs/api.war Docker/tomcat
 
 reset-tomcat: 
 	- docker stop $(DOCKER_TOMCAT) \
