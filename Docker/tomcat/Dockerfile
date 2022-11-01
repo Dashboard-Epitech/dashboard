@@ -1,4 +1,4 @@
-FROM tomcat:10.1.1-jre17
+FROM tomcat:9-jdk17
 ARG WAR_PATH
 RUN cd /usr/local/tomcat/webapps.dist \
     && cp -R * ../webapps
