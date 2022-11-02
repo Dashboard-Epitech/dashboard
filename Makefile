@@ -1,4 +1,5 @@
 DOCKER_TOMCAT = $(shell docker ps -a --filter name=tomcat -q)
+DOCKER_TOMCAT_IMAGE = $(shell docker images tomcat -q)
 DOCKER_MYSQL = $(shell docker ps -a --filter name=mysql -q)
 
 start:
@@ -17,8 +18,7 @@ build:
 	- cd dashboard/api && ./gradlew build && cp dashboard/api/build/libs/api.war Docker/tomcat
 
 reset-tomcat: 
-	- docker stop $(DOCKER_TOMCAT) \
-		&& docker rm $(DOCKER_TOMCAT) \
-		&& docker image rm docker_tomcat
+	- docker stop $(DOCKER_TOMCAT) 
+	- docker rm $(DOCKER_TOMCAT) 
 	- cd Docker && docker-compose up -d
 
