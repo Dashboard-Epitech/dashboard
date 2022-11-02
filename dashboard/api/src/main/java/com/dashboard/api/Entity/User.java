@@ -17,7 +17,10 @@ public class User {
   private Integer id;
 
   @Column(length = 256)
-  private String name;
+  private String lastName;
+
+  @Column(length = 256)
+  private String firstName;
 
   @Column(length = 256, unique = true)
   private String email;
@@ -28,12 +31,6 @@ public class User {
   @OneToMany(mappedBy = "User", targetEntity = DashBoard.class, orphanRemoval = true)
   private List<DashBoard> dashboards;
 
-  @Column(length = 256, nullable = true)
-  private String intraEpitech;
-
-  @Column(length = 256, nullable = true)
-  private String youtube;
-
   public User() {
     this.dashboards = new ArrayList<>();
   }
@@ -42,12 +39,20 @@ public class User {
     return id;
   }
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   public String getEmail() {
@@ -80,21 +85,5 @@ public class User {
 
   public void removeDashBoard(DashBoard dashBoard) {
     this.dashboards.remove(dashBoard);
-  }
-
-  public String getIntraEpitech() {
-    return intraEpitech;
-  }
-
-  public void setIntraEpitech(String intraEpitech) {
-    this.intraEpitech = intraEpitech;
-  }
-
-  public String getYoutube() {
-    return youtube;
-  }
-
-  public void setYoutube(String youtube) {
-    this.youtube = youtube;
   }
 }
