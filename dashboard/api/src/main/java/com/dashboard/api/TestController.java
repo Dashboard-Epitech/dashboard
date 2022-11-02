@@ -16,7 +16,7 @@ public class TestController {
 
 	@GetMapping("/hello")
 	public String sayHello() {
-		return "Greetings from Spring Boot!";
+		return "Greetings from Spring Boot! Mes couilles sur ton front";
 	}
 
 	@GetMapping(path="/all")
