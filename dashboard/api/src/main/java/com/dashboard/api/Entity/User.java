@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
   @Id
@@ -30,6 +32,9 @@ public class User {
 
   @OneToMany(mappedBy = "User", targetEntity = DashBoard.class, orphanRemoval = true)
   private List<DashBoard> dashboards;
+
+  @Column(columnDefinition = "boolean")
+  private Boolean isVerified;
 
   public User() {
     this.dashboards = new ArrayList<>();
@@ -85,5 +90,13 @@ public class User {
 
   public void removeDashBoard(DashBoard dashBoard) {
     this.dashboards.remove(dashBoard);
+  }
+
+  public Boolean getIsVerified() {
+    return isVerified;
+  }
+
+  public void setIsVerified(Boolean isVerified) {
+    this.isVerified = isVerified;
   }
 }

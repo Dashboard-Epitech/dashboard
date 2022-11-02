@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.CollectionId;
+
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 @Entity
 public class Widget {
 
@@ -14,4 +18,7 @@ public class Widget {
     private Integer id;
 
     private DashBoard dashBoard;
+
+    @Column(columnDefinition = "json")
+    private String data;
 }
