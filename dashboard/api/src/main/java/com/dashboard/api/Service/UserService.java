@@ -12,16 +12,15 @@ import com.dashboard.api.Repository.RoleRepository;
 import com.dashboard.api.Repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserService implements UserServiceInterface {
-
-    @Autowired
     private final UserRepository userRepository;
-
-    @Autowired
     private final RoleRepository roleRepository;
 
     @Override
@@ -48,7 +47,7 @@ public class UserService implements UserServiceInterface {
     public void setUserRole(String email, String roleName) {
         User user = userRepository.findByEmail(email);    
         Role role = roleRepository.findByName(roleName);
-
+        
         user.getRoles().add(role);
     }
 }

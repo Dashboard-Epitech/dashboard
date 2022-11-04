@@ -1,41 +1,24 @@
-package com.dashboard.api.Security.Roles;
+package com.dashboard.api.Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
   
     private String name;
-
-    public Role() {
-    }
-
-    public Role(Long id, String name) {
-        this.id = id; 
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Role setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public Role setName(String name) {
-        this.name = name;
-        return this;
-    }
 }
