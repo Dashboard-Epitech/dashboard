@@ -20,13 +20,13 @@ build:
 	- cp dashboard/api/build/libs/api.war Docker/tomcat
 
 deploy:
-	- cd dashboard/api && ./gradlew build -x test
+	- cd dashboard/api && ./gradlew build -x test 
 	- cp dashboard/api/build/libs/api.war Docker/tomcat
 	- docker stop $(DOCKER_TOMCAT) 
 	- docker rm $(DOCKER_TOMCAT) 
 	- docker rmi $(DOCKER_DANGLING)
 	- docker rmi $(DOCKER_TOMCAT_IMAGE)
-	- cd Docker && docker-compose up -d
+	- docker-compose up -d
 
 reset-tomcat: 
 	- docker stop $(DOCKER_TOMCAT) 
