@@ -28,6 +28,22 @@ public class WeatherService extends WidgetService {
         return weather;
     }
 
+    public Object updateCity(int id, String body, WidgetRepository widgetRepository) throws Exception {
+        Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
+
+        JSONObject input = new JSONObject(body);
+
+        String city = input.getString("city");
+        if (!city.isBlank())
+            weather.setCity(city);
+        else
+            weather.setCity(null);
+
+        widgetRepository.save(weather);
+
+        return weather;
+    }
+
     public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
         Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
 

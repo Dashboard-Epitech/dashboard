@@ -17,6 +17,16 @@ public class CurrencieController extends WidgetContoller {
         return currencieService.createWidget(body, this.widgetRepository);
     }
 
+    @RequestMapping(path = "/updateCurrencies/{id}", method = RequestMethod.POST)
+    public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody String body,
+            CurrencieService currencieService) {
+        try {
+            return currencieService.updateCurrencies(Integer.parseInt(id), body, this.widgetRepository);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
     @RequestMapping(path = "/updateData/{id}")
     public Object UpdateDataWidget(@PathVariable(value = "id") String id, CurrencieService currencieService) {
         try {

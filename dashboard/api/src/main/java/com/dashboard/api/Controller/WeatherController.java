@@ -17,6 +17,16 @@ public class WeatherController extends WidgetContoller {
         return weatherService.createWidget(body, this.widgetRepository);
     }
 
+    @RequestMapping(path = "/updateCity/{id}", method = RequestMethod.POST)
+    public Object UpdateCity(@PathVariable(value = "id") String id, @RequestBody String body,
+            WeatherService weatherService) {
+        try {
+            return weatherService.updateCity(Integer.parseInt(id), body, this.widgetRepository);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
     @RequestMapping(path = "/updateData/{id}")
     public Object UpdateDataWidget(@PathVariable(value = "id") String id, WeatherService weatherService) {
         try {

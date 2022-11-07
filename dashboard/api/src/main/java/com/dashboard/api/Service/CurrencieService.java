@@ -33,6 +33,24 @@ public class CurrencieService extends WeatherService {
         return currencie;
     }
 
+    public Object updateCurrencies(int id, String body, WidgetRepository widgetRepository) throws Exception {
+        Currencie currency = super.getInstanceOf(Currencie.class, id, widgetRepository);
+
+        JSONObject input = new JSONObject(body);
+
+        String currency1 = input.getString("currency1");
+        String currency2 = input.getString("currency2");
+        if (!currency1.isBlank())
+            currency.setCurrencie1(currency1);
+
+        if (!currency2.isBlank())
+            currency.setCurrencie2(currency2);
+
+        widgetRepository.save(currency);
+
+        return currency;
+    }
+
     public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
         Currencie currencie = super.getInstanceOf(Currencie.class, id, widgetRepository);
 
