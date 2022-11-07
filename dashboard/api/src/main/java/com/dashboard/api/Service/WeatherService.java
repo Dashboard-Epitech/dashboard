@@ -35,8 +35,8 @@ public class WeatherService extends WidgetService {
             throw new Exception(id + " have not city");
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(Weather.getApiUrl() + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
-                        + Weather.getApiKey()))
+                .uri(new URI(Weather.getAPI_URL() + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
+                        + Weather.getAPI_KEY()))
                 .build();
 
         HttpClient httpClient = HttpClient.newHttpClient();

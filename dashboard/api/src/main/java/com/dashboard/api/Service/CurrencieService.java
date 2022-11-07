@@ -41,7 +41,7 @@ public class CurrencieService extends WeatherService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
-                        Currencie.getApiUrl() + Currencie.getApiUrlConvertCurrenci() + "?from="
+                        Currencie.getAPI_URL() + Currencie.getAPI_URL_CONVERT_CURRENCI() + "?from="
                                 + currencie.getCurrencie1()
                                 + "&to=" + currencie.getCurrencie2()))
                 .build();
@@ -56,7 +56,7 @@ public class CurrencieService extends WeatherService {
     public String getAllCurrencie() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
-                        Currencie.getApiUrl() + Currencie.getApiUrlAllCurrencies()))
+                        Currencie.getAPI_URL() + Currencie.getAPI_URL_ALL_CURRENCIES()))
                 .build();
 
         HttpClient httpClient = this.getClient();
@@ -71,8 +71,8 @@ public class CurrencieService extends WeatherService {
                 .authenticator(new Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Currencie.getApiUsername(),
-                                Currencie.getApiPassword().toCharArray());
+                        return new PasswordAuthentication(Currencie.getAPI_USERNAME(),
+                                Currencie.getAPI_PASSWORD().toCharArray());
                     }
                 })
                 .build();

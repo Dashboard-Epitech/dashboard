@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import lombok.Getter;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
@@ -15,13 +17,6 @@ public abstract class Widget {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
     private Integer id;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String callAPI() throws Exception {
-        return null;
-    }
 }

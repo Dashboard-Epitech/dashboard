@@ -7,6 +7,7 @@ import com.dashboard.api.Repository.WidgetRepository;
 
 public class WidgetService {
 
+    @SuppressWarnings("unchecked")
     protected <T extends Widget> T getInstanceOf(Class<T> clazz, int id, WidgetRepository widgetRepository)
             throws Exception {
         Optional<Widget> temp = widgetRepository.findById(id);

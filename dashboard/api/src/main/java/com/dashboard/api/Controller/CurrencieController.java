@@ -17,7 +17,7 @@ public class CurrencieController extends WidgetContoller {
         return currencieService.createWidget(body, this.widgetRepository);
     }
 
-    @RequestMapping(path = "updateData/{id}")
+    @RequestMapping(path = "/updateData/{id}")
     public Object UpdateDataWidget(@PathVariable(value = "id") String id, CurrencieService currencieService) {
         try {
             return currencieService.updateData(Integer.parseInt(id), this.widgetRepository);
