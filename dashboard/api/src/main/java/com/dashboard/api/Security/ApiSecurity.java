@@ -1,5 +1,7 @@
 package com.dashboard.api.Security;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
  
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Repository.DashboardUserRepository;
 
  
@@ -26,13 +29,21 @@ public class ApiSecurity {
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
-             
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return dashboardUserRepository.findByEmail(username)
-                        .orElse(dashboardUserRepository.findByUsername(username)
-                        .orElseThrow(() -> new UsernameNotFoundException(username))
-                        );
+                Optional<DashboardUser> tryEmail = dashboardUserRepository.findByEmail(username);
+                Optional<DashboardUser> tryUserName = dashboardUserRepository.findByUsername(username);
+
+                if (!tryEmail.isPresent() && !tryUserName.isPresent()) {
+                    throw new UsernameNotFoundException(username);
+                }
+
+                return tryEmail.isPresent() ? tryEmail.get() : tryUserName.get();
+                
+                // return dashboardUserRepository.findByEmail(username)
+                //         .orElse(dashboardUserRepository.findByUsername(username)
+                //         .orElseThrow(() -> new UsernameNotFoundException(username))
+                //         );
             }
         };
     }
