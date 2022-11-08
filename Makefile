@@ -20,6 +20,9 @@ build:
 	- cd dashboard/api && ./gradlew build -x test
 	- cp dashboard/api/build/libs/api.war Docker/tomcat
 
+run_local: 
+	- cd dashboard/api && ./gradlew bootRun
+
 deploy:
 	- cd dashboard/api && ./gradlew build -x test \
 	  && cp build/libs/api.war ../../Docker/tomcat \

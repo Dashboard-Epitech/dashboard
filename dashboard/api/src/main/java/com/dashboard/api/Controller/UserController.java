@@ -24,14 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-<<<<<<< HEAD
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.UserNotFoundException;
-=======
-import com.dashboard.api.Entity.User;
-import com.dashboard.api.Exception.UserNotFoundException;
-import com.dashboard.api.Forms.RoleToUserForm;
->>>>>>> f74fb6358978fd1ef1132795bb0f7f54b6df8ee4
 import com.dashboard.api.Service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -54,11 +48,7 @@ public class UserController {
 	}
 
 	@PatchMapping("/edit/{id}")
-<<<<<<< HEAD
 	public ResponseEntity<?> editUser(@PathVariable("id") @NotNull Long id, @RequestBody @Valid DashboardUser user) {
-=======
-	public ResponseEntity<?> editUser(@PathVariable("id") @NotNull Long id, @RequestBody @Valid User user) {
->>>>>>> f74fb6358978fd1ef1132795bb0f7f54b6df8ee4
 		try {
 			return ResponseEntity.ok().body(userService.editUser(id, user));
 		} catch (UserNotFoundException userNotFoundException) {
@@ -80,14 +70,6 @@ public class UserController {
 		}
 	}
 
-<<<<<<< HEAD
-=======
-	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
-		return ResponseEntity.created(null).body(userService.registerUser(user));
-	}
-
->>>>>>> f74fb6358978fd1ef1132795bb0f7f54b6df8ee4
 	@GetMapping("/all")
 	public ResponseEntity<?> getUsers() {
 		try {
@@ -109,12 +91,4 @@ public class UserController {
 
 		return errors;
 	}
-<<<<<<< HEAD
-=======
-
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(Exception.class)
-	public void handleGenericException(Exception ex) {
-	} 
->>>>>>> f74fb6358978fd1ef1132795bb0f7f54b6df8ee4
 }
