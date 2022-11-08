@@ -3,6 +3,7 @@ package com.dashboard.api.Entity;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
@@ -21,10 +22,13 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -34,7 +38,7 @@ import lombok.experimental.Accessors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class DashboardUser implements UserDetails {
 
   @Column
   @Id
@@ -45,16 +49,6 @@ public class User {
   @NotBlank(message = "No username found")
   @NotNull(message = "No username found")
   private String username;
-
-  @Column
-  @NotBlank(message = "No first name found")
-  @NotNull(message = "No first name found")
-  private String firstName;
-
-  @Column
-  @NotBlank(message = "No last name found")
-  @NotNull(message = "No last name found")
-  private String lastName;
 
   @Column
   @NotBlank(message = "No password found")
@@ -75,6 +69,9 @@ public class User {
   private boolean verified = false;
 
   @Column
+  private String verificationCode;
+
+  @Column
   @CreationTimestamp
   private LocalDate dateCreated;
 
@@ -82,8 +79,34 @@ public class User {
   @UpdateTimestamp
   private LocalDate dateUpdated;
 
-  public User addRole(Role role) {
-      this.roles.add(role);
-      return this;
+  @Override
+  public boolean isEnabled() {
+    return this.verified;
   }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.EMPTY_LIST;
+  }
+
+  public DashboardUser addRole(Role role) {
+    this.roles.add(role);
+    return this;
+  }
+
 }

@@ -1,40 +1,33 @@
 package com.dashboard.api.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import javax.validation.ValidationException;
-import javax.validation.Validator;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.dashboard.api.Entity.Role;
-import com.dashboard.api.Entity.User;
+import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.NoDataFoundException;
 import com.dashboard.api.Exception.UserNotFoundException;
 import com.dashboard.api.Repository.RoleRepository;
-import com.dashboard.api.Repository.UserRepository;
+import com.dashboard.api.Repository.DashboardUserRepository;
 
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserServiceInterface {
-    private final UserRepository userRepository;
+public class UserService {
+    private final MailService mailService;
+    private final DashboardUserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Validator validator;
 
-    @Override
-    public User getUser(Long id) throws UserNotFoundException {
-        Optional<User> user = userRepository.findById(id);
+    public DashboardUser getUser(Long id) throws UserNotFoundException {
+        Optional<DashboardUser> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new UserNotFoundException();
         }
@@ -42,9 +35,8 @@ public class UserService implements UserServiceInterface {
         return user.get();
     }
 
-    @Override
-    public User getUserByEmail(String email) throws UserNotFoundException {
-        User user = userRepository.findByEmail(email);
+    public DashboardUser getUserByEmail(String email) throws UserNotFoundException {
+        DashboardUser user = userRepository.findByEmail(email).get();
         if (user == null) {
             throw new UserNotFoundException();
         }
@@ -52,9 +44,8 @@ public class UserService implements UserServiceInterface {
         return user;
     }
 
-    @Override
-    public List<User> getUsers() throws NoDataFoundException {
-        List<User> users = userRepository.findAll();
+    public List<DashboardUser> getUsers() throws NoDataFoundException {
+        List<DashboardUser> users = userRepository.findAll();
 
         if (users.isEmpty()) {
             throw new NoDataFoundException();
@@ -63,9 +54,8 @@ public class UserService implements UserServiceInterface {
         return users;
     }
 
-    @Override
     public void removeUser(Long id) throws UserNotFoundException {
-        Optional<User> user = userRepository.findById(id);
+        Optional<DashboardUser> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new UserNotFoundException();
         }
@@ -73,39 +63,61 @@ public class UserService implements UserServiceInterface {
         userRepository.delete(user.get());
     }
 
-    @Override
-    public User editUser(Long id, User userFormData) throws UserNotFoundException {
-        Optional<User> user = userRepository.findById(id);
+    public DashboardUser editUser(Long id, DashboardUser userFormData) throws UserNotFoundException {
+        Optional<DashboardUser> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new UserNotFoundException();
         }
 
         user.get()
             .setUsername(userFormData.getUsername())
-            .setFirstName(userFormData.getFirstName())
-            .setLastName(userFormData.getLastName());
+            .setEmail(userFormData.getEmail())
+            .setPassword(userFormData.getPassword());
         
         return userRepository.save(user.get());
     }
     
-    public User registerUser(User user) throws ConstraintViolationException {
+    public DashboardUser registerUser(DashboardUser user) throws Exception {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.addRole(roleRepository.findByName("USER"));
-            return userRepository.save(user);
+
+            String verificationCode = RandomString.make(64);
+            user.setVerificationCode(verificationCode);
+
+            userRepository.save(user);
+
+            mailService.sendVerificationMail(user, verificationCode);
+
+            return user;
         } catch(Exception validationEx) {
             throw validationEx;
         }
     }
 
-    @Override
+    public DashboardUser verifyUser(Long userId, String verificationCode) throws Exception {
+        try {
+            Optional<DashboardUser> user = userRepository.findById(userId);
+            if (!user.isPresent()) {
+                throw new UserNotFoundException();
+            }
+    
+            if (verificationCode.equals(user.get().getVerificationCode())) {
+                user.get().setVerified(true);
+            }
+    
+            return userRepository.save(user.get());
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
     public Role saveRole(Role role) {
         return this.roleRepository.save(role);
     }
 
-    @Override
     public void setUserRole(String email, String roleName) {
-        User user = userRepository.findByEmail(email);    
+        DashboardUser user = userRepository.findByEmail(email).get();   
         Role role = roleRepository.findByName(roleName);
         
         user.getRoles().add(role);
