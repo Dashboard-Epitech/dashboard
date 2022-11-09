@@ -21,7 +21,7 @@ public class MailService {
             MimeMessage email = javaMailSender.createMimeMessage();
             email.setRecipient(RecipientType.TO, new InternetAddress(user.getEmail(), user.getUsername()));
             email.setSubject("Dashboard User Account Verification");
-            email.setContent("<a href=\"http://dashboard:8080/api/auth/verify/" + user.getId() + "/" + verificationCode + "\">Click this link to verify your account</a>", "text/html");
+            email.setContent("<a href=\"http://dashboard.io:8080/api/auth/verify/" + user.getId() + "/" + verificationCode + "\">Click this link to verify your account</a>", "text/html");
     
             javaMailSender.send(email);
         } catch (Exception ex) {
