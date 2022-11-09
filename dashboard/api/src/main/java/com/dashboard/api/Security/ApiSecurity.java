@@ -14,9 +14,11 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.dashboard.api.Entity.DashboardUser;
+import com.dashboard.api.JWT.JwtTokenFilter;
 import com.dashboard.api.Repository.DashboardUserRepository;
 
  
@@ -24,7 +26,7 @@ import com.dashboard.api.Repository.DashboardUserRepository;
 public class ApiSecurity {
      
     @Autowired private DashboardUserRepository dashboardUserRepository;
-    // @Autowired private JwtTokenFilter jwtTokenFilter;
+    @Autowired private JwtTokenFilter jwtTokenFilter;
      
     @Bean
     public UserDetailsService userDetailsService() {
@@ -39,11 +41,6 @@ public class ApiSecurity {
                 }
 
                 return tryEmail.isPresent() ? tryEmail.get() : tryUserName.get();
-                
-                // return dashboardUserRepository.findByEmail(username)
-                //         .orElse(dashboardUserRepository.findByUsername(username)
-                //         .orElseThrow(() -> new UsernameNotFoundException(username))
-                //         );
             }
         };
     }
@@ -67,7 +64,7 @@ public class ApiSecurity {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated();
-        // http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
          
         return http.build();
     }

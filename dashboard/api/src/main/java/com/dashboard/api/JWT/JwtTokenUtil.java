@@ -13,6 +13,26 @@ public class JwtTokenUtil {
      
     @Value("${app.jwt.secret}")
     private String SECRET_KEY;
+
+    public boolean validateAccessToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public String getSubject(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+                   .setSigningKey(SECRET_KEY)
+                   .parseClaimsJws(token)
+                   .getBody();
+    }
      
     public String generateAccessToken(DashboardUser user) {
         return Jwts.builder()
