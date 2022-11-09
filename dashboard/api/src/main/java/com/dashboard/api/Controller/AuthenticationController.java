@@ -1,25 +1,25 @@
 package com.dashboard.api.Controller;
 
+import java.net.URI;
+import java.net.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import javax.validation.ValidationException;
-import javax.validation.constraints.NotNull;
 
-import org.apache.catalina.connector.Response;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +31,8 @@ import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import com.dashboard.api.Auth.AuthRequest;
 import com.dashboard.api.Auth.AuthResponse;
 import com.dashboard.api.Entity.DashboardUser;
+import com.dashboard.api.Error.BadCredentialsError;
+import com.dashboard.api.Error.UsernameAlreadyExistsError;
 import com.dashboard.api.JWT.JwtTokenUtil;
 import com.dashboard.api.Service.UserService;
 
@@ -49,14 +51,16 @@ public class AuthenticationController {
 		try {
 			return ResponseEntity.created(null).body(userService.registerUser(user));
 		} catch (Exception ex) {
-			return ResponseEntity.internalServerError().body(ex.getMessage());
+			return ResponseEntity.badRequest().body(new UsernameAlreadyExistsError().build());
 		}
 	}
 
-	@PostMapping("/verify/{id}/{verificationCode}")
-	public ResponseEntity<?> verifyUser(@PathVariable("id") Long id, @PathVariable("verificationCode") String verificationCode) {
+	@GetMapping("/verify/{id}/{verificationCode}")
+	public ResponseEntity<?> verifyUser(@PathVariable("id") Long id,
+			@PathVariable("verificationCode") String verificationCode) {
 		try {
-			return ResponseEntity.ok().body(userService.verifyUser(id, verificationCode));
+			userService.verifyUser(id, verificationCode);
+			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("http://localhost:3000")).build();
 		} catch (Exception ex) {
 			return ResponseEntity.internalServerError().body(ex.getMessage());
 		}
@@ -104,15 +108,16 @@ public class AuthenticationController {
 
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<?> badCredentialsExceptions(BadCredentialsException ex) {
-		Map<String, String> error = new HashMap<>();
-		String errorTypeKey = "errorType";
-		String errorName = "badCredentials";
-		String errorValueKey = "errorContent";
-		String errorValue = ex.getMessage();
-		error.put(errorTypeKey, errorName);
-		error.put(errorValueKey, errorValue);
+		BadCredentialsError badCredentialsError = new BadCredentialsError(ex.getMessage());
 
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badCredentialsError.build());
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+		UsernameAlreadyExistsError usernameAlreadyExistsError = new UsernameAlreadyExistsError();
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(usernameAlreadyExistsError.build());
 	}
 
 	@ExceptionHandler(MailSendException.class)
@@ -127,6 +132,4 @@ public class AuthenticationController {
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 	}
-
-	
 }

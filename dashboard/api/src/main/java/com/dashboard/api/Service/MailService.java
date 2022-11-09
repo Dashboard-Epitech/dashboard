@@ -15,11 +15,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MailService {
     private final JavaMailSender javaMailSender;
+    private final static String REGISTRATION_SENDER =  "register@dashboard.io";
 
     public void sendVerificationMail(DashboardUser user, String verificationCode) throws Exception {
         try {
             MimeMessage email = javaMailSender.createMimeMessage();
             email.setRecipient(RecipientType.TO, new InternetAddress(user.getEmail(), user.getUsername()));
+            email.setFrom(new InternetAddress(REGISTRATION_SENDER));
             email.setSubject("Dashboard User Account Verification");
             email.setContent("<a href=\"http://dashboard.io:8080/api/auth/verify/" + user.getId() + "/" + verificationCode + "\">Click this link to verify your account</a>", "text/html");
     

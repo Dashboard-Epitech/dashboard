@@ -1,5 +1,6 @@
 package com.dashboard.api.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,7 +81,7 @@ public class UserService {
     public DashboardUser registerUser(DashboardUser user) throws Exception {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.addRole(roleRepository.findByName("USER"));
+            user.setRoles(Arrays.asList(roleRepository.findByName("USER")));
 
             String verificationCode = RandomString.make(64);
             user.setVerificationCode(verificationCode);
@@ -104,6 +105,7 @@ public class UserService {
     
             if (verificationCode.equals(user.get().getVerificationCode())) {
                 user.get().setVerified(true);
+                user.get().setVerificationCode(null);
             }
     
             return userRepository.save(user.get());

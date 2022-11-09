@@ -66,7 +66,7 @@ public class UserController {
 		} catch (UserNotFoundException userNotFoundException) {
 			return ResponseEntity.notFound().build();
 		} catch (Exception stdException) {
-			return ResponseEntity.internalServerError().build();
+			return ResponseEntity.internalServerError().body(stdException.getClass());
 		}
 	}
 
@@ -75,7 +75,7 @@ public class UserController {
 		try {
 			return ResponseEntity.ok().body(userService.getUsers());
 		} catch (Exception ex) {
-			return ResponseEntity.internalServerError().build();
+			return ResponseEntity.internalServerError().body(ex.getMessage());
 		}
 	}
 
