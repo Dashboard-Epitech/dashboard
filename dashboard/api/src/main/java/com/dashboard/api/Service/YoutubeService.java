@@ -10,14 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.dashboard.api.Entity.Youtube;
+import com.dashboard.api.Entity.YoutubeChannel;
 import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
 public class YoutubeService extends WidgetService {
 
-    public Object createWidget(String body, WidgetRepository widgetRepository) {
-        Youtube youtube = new Youtube();
+    public Object createChannel(String body, WidgetRepository widgetRepository) {
+        YoutubeChannel youtube = new YoutubeChannel();
         JSONObject input = new JSONObject(body);
 
         String channel = input.getString("channel");
@@ -30,7 +30,7 @@ public class YoutubeService extends WidgetService {
     }
 
     public Object updateChannel(int id, String body, WidgetRepository widgetRepository) throws Exception {
-        Youtube youtube = super.getInstanceOf(Youtube.class, id, widgetRepository);
+        YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id, widgetRepository);
 
         JSONObject input = new JSONObject(body);
 
@@ -45,15 +45,16 @@ public class YoutubeService extends WidgetService {
         return youtube;
     }
 
-    public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
-        Youtube youtube = super.getInstanceOf(Youtube.class, id, widgetRepository);
+    public String updateDataChannel(int id, WidgetRepository widgetRepository) throws Exception {
+        YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id, widgetRepository);
 
         if (youtube.getChannel() == null)
             throw new Exception("Not channel");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
-                        Youtube.getAPI_URL() + Youtube.getAPI_SEARCH() + "&key=" + Youtube.getAPI_KEY()
+                        YoutubeChannel.getAPI_URL() + YoutubeChannel.getAPI_SEARCH() + "&key="
+                                + YoutubeChannel.getAPI_KEY()
                                 + "&q=" + youtube.getChannel()))
                 .build();
 
@@ -68,7 +69,8 @@ public class YoutubeService extends WidgetService {
 
         request = HttpRequest.newBuilder()
                 .uri(new URI(
-                        Youtube.getAPI_URL() + Youtube.getAPI_CHANNEL() + "&key=" + Youtube.getAPI_KEY() + "&id="
+                        YoutubeChannel.getAPI_URL() + YoutubeChannel.getAPI_CHANNEL() + "&key="
+                                + YoutubeChannel.getAPI_KEY() + "&id="
                                 + idChannel))
                 .build();
 

@@ -15,8 +15,9 @@ import com.dashboard.api.Entity.Currencie;
 import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
-public class CurrencieService extends WeatherService {
+public class CurrencieService extends WidgetService {
 
+    @Override
     public Object createWidget(String body, WidgetRepository widgetRepository) {
         Currencie currencie = new Currencie();
         JSONObject input = new JSONObject(body);
@@ -33,7 +34,8 @@ public class CurrencieService extends WeatherService {
         return currencie;
     }
 
-    public Object updateCurrencies(int id, String body, WidgetRepository widgetRepository) throws Exception {
+    @Override
+    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
         Currencie currency = super.getInstanceOf(Currencie.class, id, widgetRepository);
 
         JSONObject input = new JSONObject(body);
@@ -51,6 +53,7 @@ public class CurrencieService extends WeatherService {
         return currency;
     }
 
+    @Override
     public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
         Currencie currencie = super.getInstanceOf(Currencie.class, id, widgetRepository);
 
