@@ -29,7 +29,7 @@ const Youtube = ({ size, ...props }) => {
                             {props.channel.title}
                         </Text>
                         <Text fontFamily="revert" color="gray" fontSize="12px" margin="4" noOfLines={1}>
-                            {props.channel.abonne} abonnés
+                            {props.channel.subscriberCount} abonnés
                         </Text>
                 </Box>
 
