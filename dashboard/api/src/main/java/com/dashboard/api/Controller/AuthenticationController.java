@@ -31,8 +31,8 @@ import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import com.dashboard.api.Auth.AuthRequest;
 import com.dashboard.api.Auth.AuthResponse;
 import com.dashboard.api.Entity.DashboardUser;
-import com.dashboard.api.Error.BadCredentialsError;
-import com.dashboard.api.Error.UsernameAlreadyExistsError;
+import com.dashboard.api.Error.BadCredentialsResponseError;
+import com.dashboard.api.Error.UsernameAlreadyExistsResponseError;
 import com.dashboard.api.JWT.JwtTokenUtil;
 import com.dashboard.api.Service.UserService;
 
@@ -51,7 +51,7 @@ public class AuthenticationController {
 		try {
 			return ResponseEntity.created(null).body(userService.registerUser(user));
 		} catch (Exception ex) {
-			return ResponseEntity.badRequest().body(new UsernameAlreadyExistsError().build());
+			return ResponseEntity.badRequest().body(new UsernameAlreadyExistsResponseError().build());
 		}
 	}
 
@@ -108,14 +108,14 @@ public class AuthenticationController {
 
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<?> badCredentialsExceptions(BadCredentialsException ex) {
-		BadCredentialsError badCredentialsError = new BadCredentialsError(ex.getMessage());
+		BadCredentialsError badCredentialsError = new BadCredentialsResponseError(ex.getMessage());
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badCredentialsError.build());
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-		UsernameAlreadyExistsError usernameAlreadyExistsError = new UsernameAlreadyExistsError();
+		UsernameAlreadyExistsError usernameAlreadyExistsError = new UsernameAlreadyExistsResponseError();
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(usernameAlreadyExistsError.build());
 	}
