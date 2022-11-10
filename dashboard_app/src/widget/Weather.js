@@ -16,8 +16,8 @@ const Weather = ({ size, ...props }) => {
                 borderRadius='10px'
                 backgroundPosition="center"
                 backgroundSize="cover"
-                backgroundImage={"url('weather/back/" + props.icon + ".jpg')"}
-                textColor={String(props.icon).includes("d") && !String(props.icon).includes("04") ? "black" : "white"}
+                backgroundImage={"url('weather/back/" + props.weather.icon + ".jpg')"}
+                textColor={String(props.weather.icon).includes("d") && !String(props.weather.icon).includes("04") ? "black" : "white"}
                 position="relative"
             >
                     <Center
@@ -65,7 +65,7 @@ const Weather = ({ size, ...props }) => {
                         marginX="350px"
                         backgroundColor="rgba(255, 255, 255, .3);"
                     >
-                        <Image src={"./weather/icon/" + props.icon + ".png"} boxSize="60px" color={"white"}/>
+                        <Image src={"./weather/icon/" + props.weather.icon + ".png"} boxSize="60px" color={"white"}/>
                     </Center>
             </Box>
         )
