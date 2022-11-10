@@ -108,14 +108,14 @@ public class AuthenticationController {
 
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<?> badCredentialsExceptions(BadCredentialsException ex) {
-		BadCredentialsError badCredentialsError = new BadCredentialsResponseError(ex.getMessage());
+		BadCredentialsResponseError badCredentialsError = new BadCredentialsResponseError(ex.getMessage());
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badCredentialsError.build());
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-		UsernameAlreadyExistsError usernameAlreadyExistsError = new UsernameAlreadyExistsResponseError();
+		UsernameAlreadyExistsResponseError usernameAlreadyExistsError = new UsernameAlreadyExistsResponseError();
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(usernameAlreadyExistsError.build());
 	}
