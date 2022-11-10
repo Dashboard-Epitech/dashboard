@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Weather;
@@ -14,6 +15,10 @@ import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
 public class WeatherService extends WidgetService {
+
+    @Value("${WEATHER_API_KEY}")
+    private String API_KEY;
+    private final static String API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     @Override
     public Object createWidget(String body, WidgetRepository widgetRepository) {
@@ -54,8 +59,8 @@ public class WeatherService extends WidgetService {
             throw new Exception(id + " have not city");
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(Weather.getAPI_URL() + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
-                        + Weather.getAPI_KEY()))
+                .uri(new URI(API_URL + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
+                        + API_KEY))
                 .build();
 
         HttpClient httpClient = HttpClient.newHttpClient();

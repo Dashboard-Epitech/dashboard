@@ -9,6 +9,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Currencie;
@@ -16,6 +17,16 @@ import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
 public class CurrencieService extends WidgetService {
+
+    @Value("${CURRENCIES_API_USERNAME}")
+    private String API_USERNAME;
+
+    @Value("${CURRENCIES_API_PASSWORD}")
+    private String API_PASSWORD;
+
+    private final static String API_URL = "https://xecdapi.xe.com/v1/";
+    private final static String API_URL_ALL_CURRENCIES = "currencies.json/?obsolete=false";
+    private final static String API_URL_CONVERT_CURRENCI = "convert_from.json/";
 
     @Override
     public Object createWidget(String body, WidgetRepository widgetRepository) {
@@ -62,7 +73,7 @@ public class CurrencieService extends WidgetService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
-                        Currencie.getAPI_URL() + Currencie.getAPI_URL_CONVERT_CURRENCI() + "?from="
+                        API_URL + API_URL_CONVERT_CURRENCI + "?from="
                                 + currencie.getCurrencie1()
                                 + "&to=" + currencie.getCurrencie2()))
                 .build();
@@ -77,7 +88,7 @@ public class CurrencieService extends WidgetService {
     public String getAllCurrencie() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
-                        Currencie.getAPI_URL() + Currencie.getAPI_URL_ALL_CURRENCIES()))
+                        API_URL + API_URL_ALL_CURRENCIES))
                 .build();
 
         HttpClient httpClient = this.getClient();
@@ -92,8 +103,8 @@ public class CurrencieService extends WidgetService {
                 .authenticator(new Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Currencie.getAPI_USERNAME(),
-                                Currencie.getAPI_PASSWORD().toCharArray());
+                        return new PasswordAuthentication(API_USERNAME,
+                                API_PASSWORD.toCharArray());
                     }
                 })
                 .build();
