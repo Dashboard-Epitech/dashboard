@@ -12,10 +12,5 @@ import lombok.Setter;
 @DiscriminatorValue("Youtube_channel")
 public class YoutubeChannel extends Youtube {
 
-    @Getter
-    private final static String API_SEARCH = "search?type=channel";
-    @Getter
-    private final static String API_CHANNEL = "channels?part=statistics,snippet";
-
     private String channel;
 }

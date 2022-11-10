@@ -1,11 +1,8 @@
 package com.dashboard.api.Controller;
 
 import java.net.URI;
-import java.net.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
 import javax.validation.Valid;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException.Unauthorized;
-
 import com.dashboard.api.Auth.AuthRequest;
 import com.dashboard.api.Auth.AuthResponse;
 import com.dashboard.api.Entity.DashboardUser;
@@ -60,7 +53,8 @@ public class AuthenticationController {
 			@PathVariable("verificationCode") String verificationCode) {
 		try {
 			userService.verifyUser(id, verificationCode);
-			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("http://localhost:3000")).build();
+			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("http://localhost:3000"))
+					.build();
 		} catch (Exception ex) {
 			return ResponseEntity.internalServerError().body(ex.getMessage());
 		}
