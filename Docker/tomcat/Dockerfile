@@ -1,4 +1,5 @@
 FROM tomcat:9-jdk17
+
 RUN cd /usr/local/tomcat/webapps.dist \
     && cp -R * ../webapps
 COPY ./Docker/tomcat/api.war /usr/local/tomcat/webapps

@@ -22,36 +22,44 @@ services:
     build: 
       context: .
       dockerfile: ./Docker/tomcat/Dockerfile
-      args:
-        - WAR_PATH=${WAR_PATH}
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_HOST}/${SPRING_DATASOURCE_TABLE}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_MAIL_PROTOCOL: ${SPRING_MAIL_PROTOCOL}
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_AUTH_ENABLE: ${SPRING_MAIL_AUTH_ENABLE}
+      SPRING_MAIL_SMTP_TTLS_ENABLE: ${SPRING_MAIL_SMTP_TTLS_ENABLE}
+      SPRING_MAIL_FROM: ${SPRING_MAIL_FROM}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       - mysql
     ports:
-      - 80:8080
+      - 8080:8080
+    restart: always
 
-  # reactjs:
-  #   build: 
-  #     context: ../reactjs
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   command: "npm start"
-  #   volumes:
-  #     - ../reactjs/dashboard:/var/www/dashboard
-  #     - ../reactjs/dashboard/node_modules:/var/www/dashboard/node_modules
-  #   ports:
-  #     - "3000:3000"
+  reactjs:
+    container_name: dashboard_app
+    build: 
+      context: .
+      dockerfile: ./Docker/reactjs/Dockerfile
+    restart: always
+    volumes:
+      - ./dashboard_app:/var/www/dashboard
+      - ./dashboard_app/node_modules:/var/www/dashboard/node_modules
+    ports:
+      - 3000:3000
+    working_dir: /var/www/dashboard
+    command: "npm start"
 
   maildev:
     container_name: maildev
     image: maildev/maildev
     restart: always
     ports:
-      - "1080:1080"
-      - "1025:1025"
+      - 1080:1080
+      - 1025:1025
 
   phpmyadmin:
     container_name: pma
