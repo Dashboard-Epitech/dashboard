@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
+import SpotifyAuthButton from './components/spotify/SpotifyAuthButton';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <VStack spacing={8}>
             <Logo h="40vmin" pointerEvents="none" />
             <Text>
-              Couille teube chatte
+              <SpotifyAuthButton />
             </Text>
             <Link
               color="teal.500"
