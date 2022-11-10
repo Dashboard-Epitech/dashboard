@@ -20,6 +20,9 @@ build:
 	- cd dashboard/api && ./gradlew build -x test
 	- cp dashboard/api/build/libs/api.war Docker/tomcat
 
+run_local: 
+	- cd dashboard/api && ./gradlew bootRun
+
 deploy:
 	- cd dashboard/api && ./gradlew build -x test \
 	  && cp build/libs/api.war ../../Docker/tomcat \
@@ -34,5 +37,5 @@ reset-tomcat:
 	- docker rm $(DOCKER_TOMCAT) 
 	- docker rmi $(DOCKER_DANGLING)
 	- docker rmi $(DOCKER_TOMCAT_IMAGE)
-	- cd Docker && docker-compose up -d
+	- docker-compose up -d
 
