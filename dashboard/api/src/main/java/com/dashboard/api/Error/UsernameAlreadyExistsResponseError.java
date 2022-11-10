@@ -1,8 +1,8 @@
 package com.dashboard.api.Error;
 
 
-public class UsernameAlreadyExistsError extends GenericResponseError {
-    public UsernameAlreadyExistsError() {
+public class UsernameAlreadyExistsResponseError extends GenericResponseError {
+    public UsernameAlreadyExistsResponseError() {
         super();
         this.errorTypeValue = "uniqueUsernameError";
         this.errorContentsValue = "uniqueUsernameAlreadyInUse";
