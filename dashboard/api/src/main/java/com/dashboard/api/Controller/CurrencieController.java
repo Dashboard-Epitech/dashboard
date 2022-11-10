@@ -14,26 +14,18 @@ public class CurrencieController extends WidgetContoller {
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public Object createWidget(@RequestBody String body, CurrencieService currencieService) {
-        return currencieService.createWidget(body, this.widgetRepository);
+        return super.createWidget(body, currencieService);
     }
 
     @RequestMapping(path = "/updateCurrencies/{id}", method = RequestMethod.POST)
     public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody String body,
             CurrencieService currencieService) {
-        try {
-            return currencieService.updateCurrencies(Integer.parseInt(id), body, this.widgetRepository);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        return super.updateWidget(Integer.parseInt(id), body, currencieService);
     }
 
     @RequestMapping(path = "/updateData/{id}")
     public Object UpdateDataWidget(@PathVariable(value = "id") String id, CurrencieService currencieService) {
-        try {
-            return currencieService.updateData(Integer.parseInt(id), this.widgetRepository);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        return super.updateData(Integer.parseInt(id), currencieService);
     }
 
     @RequestMapping(path = "/getAll")

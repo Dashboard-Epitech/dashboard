@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Repository.WidgetRepository;
 
-public class WidgetService {
+public abstract class WidgetService {
 
     @SuppressWarnings("unchecked")
     protected <T extends Widget> T getInstanceOf(Class<T> clazz, int id, WidgetRepository widgetRepository)
@@ -21,5 +21,17 @@ public class WidgetService {
             throw new Exception(id + " is not a " + clazz.getName());
 
         return (T) temp2;
+    }
+
+    public Object createWidget(String body, WidgetRepository widgetRepository) {
+        return null;
+    }
+
+    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
+        return null;
+    }
+
+    public Object updateData(int id, WidgetRepository widgetRepository) throws Exception {
+        return null;
     }
 }

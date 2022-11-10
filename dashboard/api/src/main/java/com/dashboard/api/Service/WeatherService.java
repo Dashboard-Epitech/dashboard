@@ -15,6 +15,7 @@ import com.dashboard.api.Repository.WidgetRepository;
 @Service
 public class WeatherService extends WidgetService {
 
+    @Override
     public Object createWidget(String body, WidgetRepository widgetRepository) {
         Weather weather = new Weather();
         JSONObject input = new JSONObject(body);
@@ -28,7 +29,8 @@ public class WeatherService extends WidgetService {
         return weather;
     }
 
-    public Object updateCity(int id, String body, WidgetRepository widgetRepository) throws Exception {
+    @Override
+    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
         Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
 
         JSONObject input = new JSONObject(body);
@@ -44,6 +46,7 @@ public class WeatherService extends WidgetService {
         return weather;
     }
 
+    @Override
     public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
         Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
 

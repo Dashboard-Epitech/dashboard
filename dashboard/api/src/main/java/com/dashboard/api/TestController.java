@@ -1,7 +1,5 @@
 package com.dashboard.api;
 
-import java.sql.Connection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +17,9 @@ public class TestController {
 		return "Greetings from Spring Boot! Mes couilles sur ton front";
 	}
 
-	@GetMapping(path="/all")
+	@GetMapping(path = "/all")
 	public @ResponseBody Iterable<User> getAllUsers() {
-	  // This returns a JSON or XML with the users
-	  return userRepository.findAll();
+		// This returns a JSON or XML with the users
+		return userRepository.findAll();
 	}
 }
