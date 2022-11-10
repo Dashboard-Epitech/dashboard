@@ -31,27 +31,30 @@ services:
     depends_on:
       - mysql
     ports:
-      - 80:8080
+      - 8080:8080
+    restart: always
 
-  # reactjs:
-  #   build: 
-  #     context: ../reactjs
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   command: "npm start"
-  #   volumes:
-  #     - ../reactjs/dashboard:/var/www/dashboard
-  #     - ../reactjs/dashboard/node_modules:/var/www/dashboard/node_modules
-  #   ports:
-  #     - "3000:3000"
+  reactjs:
+    container_name: dashboard_app
+    build: 
+      context: .
+      dockerfile: ./Docker/reactjs/Dockerfile
+    restart: always
+    volumes:
+      - ./dashboard_app:/var/www/dashboard
+      - ./dashboard_app/node_modules:/var/www/dashboard/node_modules
+    ports:
+      - 3000:3000
+    working_dir: /var/www/dashboard
+    command: "npm start"
 
   maildev:
     container_name: maildev
     image: maildev/maildev
     restart: always
     ports:
-      - "1080:1080"
-      - "1025:1025"
+      - 1080:1080
+      - 1025:1025
 
   phpmyadmin:
     container_name: pma
