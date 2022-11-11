@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Weather;
-import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
 public class WeatherService extends WidgetService {
@@ -22,7 +21,7 @@ public class WeatherService extends WidgetService {
     private final static String API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     @Override
-    public Object createWidget(String body, WidgetRepository widgetRepository) {
+    public Object createWidget(String body) {
         Weather weather = new Weather();
         JSONObject input = new JSONObject(body);
 
@@ -36,8 +35,8 @@ public class WeatherService extends WidgetService {
     }
 
     @Override
-    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
-        Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
+    public Object updateWidget(int id, String body) throws Exception {
+        Weather weather = super.getInstanceOf(Weather.class, id);
 
         JSONObject input = new JSONObject(body);
 
@@ -53,11 +52,11 @@ public class WeatherService extends WidgetService {
     }
 
     @Override
-    public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
+    public String updateData(int id) throws Exception {
         System.out.println("API KEY : ");
         System.out.println(this.api_key);
         System.out.println("END");
-        Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
+        Weather weather = super.getInstanceOf(Weather.class, id);
 
         if (weather.getCity() == null)
             throw new Exception(id + " have not city");

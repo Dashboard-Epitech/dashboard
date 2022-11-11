@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.YoutubeChannel;
-import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
 public class YoutubeChannelService extends YoutubeService {
@@ -20,7 +19,7 @@ public class YoutubeChannelService extends YoutubeService {
     private final static String API_CHANNEL = "channels?part=statistics,snippet";
 
     @Override
-    public Object createWidget(String body, WidgetRepository widgetRepository) {
+    public Object createWidget(String body) {
         YoutubeChannel youtube = new YoutubeChannel();
         JSONObject input = new JSONObject(body);
 
@@ -34,8 +33,8 @@ public class YoutubeChannelService extends YoutubeService {
     }
 
     @Override
-    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
-        YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id, widgetRepository);
+    public Object updateWidget(int id, String body) throws Exception {
+        YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id);
 
         JSONObject input = new JSONObject(body);
 
@@ -51,9 +50,9 @@ public class YoutubeChannelService extends YoutubeService {
     }
 
     @Override
-    public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
+    public String updateData(int id) throws Exception {
         System.out.println(API_KEY);
-        YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id, widgetRepository);
+        YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id);
 
         if (youtube.getChannel() == null)
             throw new Exception("Not channel");

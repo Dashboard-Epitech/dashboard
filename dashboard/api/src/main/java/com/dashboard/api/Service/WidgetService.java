@@ -2,6 +2,7 @@ package com.dashboard.api.Service;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Widget;
@@ -13,8 +14,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class WidgetService {
 
+    @Autowired
+    WidgetRepository widgetRepository;
+
     @SuppressWarnings("unchecked")
-    protected <T extends Widget> T getInstanceOf(Class<T> clazz, int id, WidgetRepository widgetRepository)
+    protected <T extends Widget> T getInstanceOf(Class<T> clazz, int id)
             throws Exception {
         Optional<Widget> temp = widgetRepository.findById(id);
 
@@ -29,15 +33,15 @@ public abstract class WidgetService {
         return (T) temp2;
     }
 
-    public Object createWidget(String body, WidgetRepository widgetRepository) {
+    public Object createWidget(String body) {
         return null;
     }
 
-    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
+    public Object updateWidget(int id, String body) throws Exception {
         return null;
     }
 
-    public Object updateData(int id, WidgetRepository widgetRepository) throws Exception {
+    public Object updateData(int id) throws Exception {
         return null;
     }
 }

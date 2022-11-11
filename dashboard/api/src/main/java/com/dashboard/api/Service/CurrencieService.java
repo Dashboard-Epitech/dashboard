@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Currencie;
-import com.dashboard.api.Repository.WidgetRepository;
 
 @Service
 public class CurrencieService extends WidgetService {
@@ -29,7 +28,7 @@ public class CurrencieService extends WidgetService {
     private final static String API_URL_CONVERT_CURRENCI = "convert_from.json/";
 
     @Override
-    public Object createWidget(String body, WidgetRepository widgetRepository) {
+    public Object createWidget(String body) {
         Currencie currencie = new Currencie();
         JSONObject input = new JSONObject(body);
 
@@ -46,8 +45,8 @@ public class CurrencieService extends WidgetService {
     }
 
     @Override
-    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
-        Currencie currency = super.getInstanceOf(Currencie.class, id, widgetRepository);
+    public Object updateWidget(int id, String body) throws Exception {
+        Currencie currency = super.getInstanceOf(Currencie.class, id);
 
         JSONObject input = new JSONObject(body);
 
@@ -65,8 +64,8 @@ public class CurrencieService extends WidgetService {
     }
 
     @Override
-    public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
-        Currencie currencie = super.getInstanceOf(Currencie.class, id, widgetRepository);
+    public String updateData(int id) throws Exception {
+        Currencie currencie = super.getInstanceOf(Currencie.class, id);
 
         if (currencie.getCurrencie1() == null || currencie.getCurrencie2() == null)
             throw new Exception("Not currencie");
