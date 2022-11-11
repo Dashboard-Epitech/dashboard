@@ -1,9 +1,9 @@
 package com.dashboard.api.Error;
 
-public class BadCredentialsResponseError extends GenericResponseError {
-    public BadCredentialsResponseError(String errorMessage) {
+public class BadCredentialsResponseError extends GenericResponseError<String> {
+    public BadCredentialsResponseError() {
         super();
         this.errorTypeValue = "badCredentialsError";
-        this.errorContentsValue = errorMessage;
+        this.errorContentsValue = "Invalid username/password combination.";
     }
 }

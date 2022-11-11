@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -85,6 +85,13 @@ public class DashboardUser implements UserDetails {
   @Override
   public boolean isEnabled() {
     return this.verified;
+  }
+
+  public DashboardUser toSafeData() {
+    DashboardUser safeData = new DashboardUser();
+    safeData.setUsername(username).setEmail(email).setRoles(roles).setVerified(verified);
+
+    return safeData;
   }
 
   @Override

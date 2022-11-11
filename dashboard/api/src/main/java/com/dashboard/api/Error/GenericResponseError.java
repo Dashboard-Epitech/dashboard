@@ -1,22 +1,21 @@
 package com.dashboard.api.Error;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONObject;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-abstract class GenericResponseError {
+abstract class GenericResponseError<T> {
     protected final String errorTypeKey = "errorType";
     protected final String errorContentsKey = "errorContents";
     protected String errorTypeValue = null;
-    protected String errorContentsValue = null;
+    protected T errorContentsValue = null;
 
-    public Map<String, String> build() {
-        Map<String, String> error = new HashMap<>();
-        error.put(this.errorTypeKey, this.errorTypeValue);
-        error.put(this.errorContentsKey, this.errorContentsValue);
+    public String build() {
+        JSONObject jsonWrapper = new JSONObject();
+        jsonWrapper.put(errorTypeKey, errorTypeValue);
+        jsonWrapper.put(errorContentsKey, errorContentsValue);
 
-        return error;
+        return jsonWrapper.toString();
     }
 }

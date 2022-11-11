@@ -1,5 +1,6 @@
 package com.dashboard.api.Security;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,18 +16,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.JWT.JwtTokenFilter;
 import com.dashboard.api.Repository.DashboardUserRepository;
-
  
 @Configuration
 public class ApiSecurity {
      
     @Autowired private DashboardUserRepository dashboardUserRepository;
     @Autowired private JwtTokenFilter jwtTokenFilter;
+
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/admin").hasRole("ADMIN")
+                .anyRequest().authenticated();
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+         
+        return http.build();
+    }
      
     @Bean
     public UserDetailsService userDetailsService() {
@@ -53,19 +69,5 @@ public class ApiSecurity {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
-    }
-     
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-         
-        http.authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .anyRequest().authenticated();
-        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-         
-        return http.build();
     }
 }
