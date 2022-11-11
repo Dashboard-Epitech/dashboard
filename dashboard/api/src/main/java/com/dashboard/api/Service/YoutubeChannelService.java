@@ -19,7 +19,8 @@ public class YoutubeChannelService extends YoutubeService {
     private final static String API_SEARCH = "search?type=channel";
     private final static String API_CHANNEL = "channels?part=statistics,snippet";
 
-    public Object createChannel(String body, WidgetRepository widgetRepository) {
+    @Override
+    public Object createWidget(String body, WidgetRepository widgetRepository) {
         YoutubeChannel youtube = new YoutubeChannel();
         JSONObject input = new JSONObject(body);
 
@@ -32,7 +33,8 @@ public class YoutubeChannelService extends YoutubeService {
         return youtube;
     }
 
-    public Object updateChannel(int id, String body, WidgetRepository widgetRepository) throws Exception {
+    @Override
+    public Object updateWidget(int id, String body, WidgetRepository widgetRepository) throws Exception {
         YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id, widgetRepository);
 
         JSONObject input = new JSONObject(body);
@@ -48,7 +50,9 @@ public class YoutubeChannelService extends YoutubeService {
         return youtube;
     }
 
-    public String updateDataChannel(int id, WidgetRepository widgetRepository) throws Exception {
+    @Override
+    public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
+        System.out.println(API_KEY);
         YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id, widgetRepository);
 
         if (youtube.getChannel() == null)

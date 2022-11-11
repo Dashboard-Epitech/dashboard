@@ -2,9 +2,15 @@ package com.dashboard.api.Service;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Repository.WidgetRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public abstract class WidgetService {
 
     @SuppressWarnings("unchecked")

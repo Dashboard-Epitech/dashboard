@@ -17,7 +17,8 @@ import com.dashboard.api.Repository.WidgetRepository;
 public class WeatherService extends WidgetService {
 
     @Value("${WEATHER_API_KEY}")
-    private String API_KEY;
+    private String api_key;
+
     private final static String API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     @Override
@@ -53,6 +54,9 @@ public class WeatherService extends WidgetService {
 
     @Override
     public String updateData(int id, WidgetRepository widgetRepository) throws Exception {
+        System.out.println("API KEY : ");
+        System.out.println(this.api_key);
+        System.out.println("END");
         Weather weather = super.getInstanceOf(Weather.class, id, widgetRepository);
 
         if (weather.getCity() == null)
@@ -60,7 +64,7 @@ public class WeatherService extends WidgetService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(API_URL + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
-                        + API_KEY))
+                        + this.api_key))
                 .build();
 
         HttpClient httpClient = HttpClient.newHttpClient();
