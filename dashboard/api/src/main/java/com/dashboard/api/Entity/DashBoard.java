@@ -20,7 +20,7 @@ import lombok.Setter;
 public class DashBoard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
@@ -31,6 +31,7 @@ public class DashBoard {
     private List<Widget> widgets = new ArrayList<>();
 
     public boolean addWidget(Widget widget) {
+        widget.setDashBoard(this);
         return this.widgets.add(widget);
     }
 
