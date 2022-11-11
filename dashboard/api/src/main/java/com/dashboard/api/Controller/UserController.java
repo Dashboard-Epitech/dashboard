@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.dashboard.api.Auth.UserDataRequest;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.UserNotFoundException;
 import com.dashboard.api.Service.UserService;
@@ -33,17 +36,18 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/user")
+@CrossOrigin(originPatterns = "http://localhost:*")
 public class UserController {
 	private final UserService userService;
 
-	@GetMapping("/get/{id}")
-	public ResponseEntity<?> getUser(@PathVariable("id") @NotNull Long id) {
+	@PostMapping("/get")
+	public ResponseEntity<?> getUser(@RequestBody UserDataRequest request) {
 		try {
-			return ResponseEntity.ok().body(userService.getUser(id));
+			return ResponseEntity.ok().body(userService.getUserByEmail(request.getEmail()).toSafeData());
 		} catch (UserNotFoundException userNotFoundException) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.internalServerError().body(request);
 		} catch (Exception stdException) {
-			return ResponseEntity.internalServerError().build();
+			return ResponseEntity.internalServerError().body(request);
 		}
 	}
 

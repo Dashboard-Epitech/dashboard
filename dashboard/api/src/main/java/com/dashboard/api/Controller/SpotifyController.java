@@ -43,7 +43,7 @@ public class SpotifyController {
         }
     }
 
-    @GetMapping("token")
+    @GetMapping("/token")
     @CrossOrigin(originPatterns = "*")
     public ResponseEntity<?> spotifyToken(@RequestParam("code") String userCode, HttpServletResponse response) throws IOException {
         SpotifyApi spotifyApi = spotifyService.geSpotifyApi();
@@ -55,7 +55,7 @@ public class SpotifyController {
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
-            // response.sendRedirect("http://localhost:3000");
+            response.sendRedirect("http://localhost:3000/dashboard/widgets/spotify/?token=" + spotifyApi.getAccessToken());
             return ResponseEntity.ok().body(spotifyApi.getAccessToken());
         } catch (Exception ex) {
             return ResponseEntity.internalServerError().body(ex.getMessage());

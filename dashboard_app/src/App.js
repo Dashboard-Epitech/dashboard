@@ -1,42 +1,52 @@
-import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
-import SpotifyAuthButton from './components/spotify/SpotifyAuthButton';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useGlobalState } from './state';
+import { AuthPage } from './components/auth/AuthPage';
+import { Dashboard } from './components/dashboard/Dashboard';
+import { LoginForm } from './components/auth/login/LoginForm';
+import { RegisterForm } from './components/auth/register/RegisterForm';
+import { AlertSuccess } from './components/alerts/AlertSuccess';
+import { HomePage } from './components/home/HomePage';
+import WebFont from 'webfontloader';
+import LogoutModal from './components/modals/LogoutModal';
+import { WidgetMenu } from './components/widgets/WidgetMenu';
+import { WidgetControls } from './components/widgets/WidgetControls';
+import { NewWidget } from './components/widgets/NewWidget';
+import { NewWeather } from './components/widgets/weather/NewWeather';
 
 function App() {
+  const [user, setUser] = useGlobalState("user");
+
+  useEffect(() => {
+    WebFont.load({
+      google: {
+        families: ['PT Mono']
+      }
+    })
+  }, [])
+  
   return (
-    <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              <SpotifyAuthButton />
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
-      </Box>
-    </ChakraProvider>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="widgets" element={<WidgetMenu />}>
+              <Route path="controls" element={<WidgetControls />}>
+                <Route path="new" element={<NewWidget />} />
+                  <Route path="weather" element={<NewWeather />}/>
+                </Route>
+              </Route>
+            </Route>
+            <Route path="/auth" element={<AuthPage />}>
+              <Route path='login' element={<LoginForm />}>
+                <Route path='verified' element={<AlertSuccess alertContent="Account Verified. Please log in !" />} />
+              </Route>
+              <Route path='register' element={<RegisterForm />} />
+            </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

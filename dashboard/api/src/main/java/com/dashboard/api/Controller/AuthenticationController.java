@@ -1,11 +1,8 @@
 package com.dashboard.api.Controller;
 
 import java.net.URI;
-import java.net.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
 import javax.validation.Valid;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,21 +22,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException.Unauthorized;
-
 import com.dashboard.api.Auth.AuthRequest;
 import com.dashboard.api.Auth.AuthResponse;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Error.BadCredentialsResponseError;
+import com.dashboard.api.Error.BadUserFormResponseError;
+import com.dashboard.api.Error.MailResponseError;
+import com.dashboard.api.Error.UserNotVerifiedError;
 import com.dashboard.api.Error.UsernameAlreadyExistsResponseError;
 import com.dashboard.api.JWT.JwtTokenUtil;
 import com.dashboard.api.Service.UserService;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/auth")
+@CrossOrigin(originPatterns = "http://localhost:*")
 public class AuthenticationController {
 	private final UserService userService;
 	private final AuthenticationManager authenticationManager;
@@ -60,7 +57,7 @@ public class AuthenticationController {
 			@PathVariable("verificationCode") String verificationCode) {
 		try {
 			userService.verifyUser(id, verificationCode);
-			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("http://localhost:3000")).build();
+			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("http://localhost:3000/auth/login/verified")).build();
 		} catch (Exception ex) {
 			return ResponseEntity.internalServerError().body(ex.getMessage());
 		}
@@ -82,33 +79,29 @@ public class AuthenticationController {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-		Map<String, String> errors = new HashMap<>();
+	public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
+		Map<String, String> validationErrors = new HashMap<>();
 		ex.getBindingResult().getAllErrors().forEach((error) -> {
 			String fieldName = ((FieldError) error).getField();
 			String errorMessage = error.getDefaultMessage();
-			errors.put(fieldName, errorMessage);
+			validationErrors.put(fieldName, errorMessage);
 		});
 
-		return errors;
+		BadUserFormResponseError badUserFormResponseError = new BadUserFormResponseError(validationErrors);
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badUserFormResponseError.build());
 	}
 
 	@ExceptionHandler(DisabledException.class)
 	public ResponseEntity<?> handleDisabledExceptions(DisabledException ex) {
-		Map<String, String> error = new HashMap<>();
-		String errorTypeKey = "errorType";
-		String errorName = "userNotVerified";
-		String errorValueKey = "errorContent";
-		String errorValue = ex.getMessage();
-		error.put(errorTypeKey, errorName);
-		error.put(errorValueKey, errorValue);
+		UserNotVerifiedError userNotVerifiedError = new UserNotVerifiedError();
 
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userNotVerifiedError.build());
 	}
 
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<?> badCredentialsExceptions(BadCredentialsException ex) {
-		BadCredentialsResponseError badCredentialsError = new BadCredentialsResponseError(ex.getMessage());
+		BadCredentialsResponseError badCredentialsError = new BadCredentialsResponseError();
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badCredentialsError.build());
 	}
@@ -122,14 +115,8 @@ public class AuthenticationController {
 
 	@ExceptionHandler(MailSendException.class)
 	public ResponseEntity<?> handleMailSendException(MailSendException ex) {
-		Map<String, String> error = new HashMap<>();
-		String errorTypeKey = "errorType";
-		String errorName = "mailError";
-		String errorValueKey = "errorContent";
-		String errorValue = ex.getMessage();
-		error.put(errorTypeKey, errorName);
-		error.put(errorValueKey, errorValue);
+		MailResponseError mailResponseError = new MailResponseError(ex.getMessage());
 
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mailResponseError.build());
 	}
 }
