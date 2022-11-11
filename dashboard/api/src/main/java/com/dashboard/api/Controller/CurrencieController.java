@@ -1,5 +1,6 @@
 package com.dashboard.api.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,26 +13,28 @@ import com.dashboard.api.Service.CurrencieService;
 @RequestMapping("widget/currencie")
 public class CurrencieController extends WidgetContoller {
 
+    @Autowired
+    CurrencieService currencieService;
+
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public Object createWidget(@RequestBody String body, CurrencieService currencieService) {
-        return super.createWidget(body, currencieService);
+    public Object createWidget(@RequestBody String body) {
+        return super.createWidget(body, this.currencieService);
     }
 
     @RequestMapping(path = "/updateCurrencies/{id}", method = RequestMethod.POST)
-    public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody String body,
-            CurrencieService currencieService) {
-        return super.updateWidget(Integer.parseInt(id), body, currencieService);
+    public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody String body) {
+        return super.updateWidget(Integer.parseInt(id), body, this.currencieService);
     }
 
     @RequestMapping(path = "/updateData/{id}")
-    public Object UpdateDataWidget(@PathVariable(value = "id") String id, CurrencieService currencieService) {
-        return super.updateData(Integer.parseInt(id), currencieService);
+    public Object UpdateDataWidget(@PathVariable(value = "id") String id) {
+        return super.updateData(Integer.parseInt(id), this.currencieService);
     }
 
     @RequestMapping(path = "/getAll")
-    public Object getAllCurrencie(CurrencieService currencieService) {
+    public Object getAllCurrencie() {
         try {
-            return currencieService.getAllCurrencie();
+            return this.currencieService.getAllCurrencie();
         } catch (Exception e) {
             return e.getMessage();
         }
