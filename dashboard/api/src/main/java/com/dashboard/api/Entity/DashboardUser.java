@@ -80,7 +80,7 @@ public class DashboardUser implements UserDetails {
   private LocalDate dateUpdated;
 
   @OneToMany(mappedBy = "user")
-  private List<DashBoard> widgets = new ArrayList<>();
+  private List<DashBoard> dashBoards = new ArrayList<>();
 
   @Override
   public boolean isEnabled() {
