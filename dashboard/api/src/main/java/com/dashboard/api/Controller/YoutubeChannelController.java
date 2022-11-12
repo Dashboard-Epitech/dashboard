@@ -23,7 +23,7 @@ public class YoutubeChannelController extends WidgetContoller {
         return super.createWidget(this.youtubeChannelService);
     }
 
-    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateChannel(@PathVariable(value = "id") String id,
             @RequestBody YoutubeChannelRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.youtubeChannelService);

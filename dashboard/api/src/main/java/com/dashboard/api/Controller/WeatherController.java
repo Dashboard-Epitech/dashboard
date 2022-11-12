@@ -23,7 +23,7 @@ public class WeatherController extends WidgetContoller {
         return super.createWidget(this.weatherService);
     }
 
-    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> UpdateCity(@PathVariable(value = "id") String id, @RequestBody WeatherRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.weatherService);
     }

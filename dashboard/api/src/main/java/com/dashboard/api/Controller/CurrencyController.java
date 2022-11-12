@@ -23,7 +23,7 @@ public class CurrencyController extends WidgetContoller {
         return super.createWidget(this.currencyService);
     }
 
-    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateCurrencies(@PathVariable(value = "id") String id,
             @RequestBody CurrencyRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.currencyService);
