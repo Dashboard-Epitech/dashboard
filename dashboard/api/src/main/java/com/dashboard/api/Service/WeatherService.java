@@ -6,11 +6,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Weather;
+import com.dashboard.api.Request.WeatherRequest;
+import com.dashboard.api.Request.WidgetRequest;
 
 @Service
 public class WeatherService extends WidgetService {
@@ -21,13 +22,8 @@ public class WeatherService extends WidgetService {
     private final static String API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     @Override
-    public Object createWidget(String body) {
+    public Object createWidget() {
         Weather weather = new Weather();
-        JSONObject input = new JSONObject(body);
-
-        String city = input.getString("city");
-        if (!city.isBlank())
-            weather.setCity(city);
 
         widgetRepository.save(weather);
 
@@ -35,16 +31,15 @@ public class WeatherService extends WidgetService {
     }
 
     @Override
-    public Object updateWidget(int id, String body) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
         Weather weather = super.getInstanceOf(Weather.class, id);
+        WeatherRequest weatherRequest = (WeatherRequest) request;
+        String city = weatherRequest.getCity();
 
-        JSONObject input = new JSONObject(body);
+        if (!this.cityValide(city))
+            throw new Exception(city + " not found");
 
-        String city = input.getString("city");
-        if (!city.isBlank())
-            weather.setCity(city);
-        else
-            weather.setCity(null);
+        weather.setCity(city);
 
         widgetRepository.save(weather);
 
@@ -71,5 +66,22 @@ public class WeatherService extends WidgetService {
         HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
 
         return response.body();
+    }
+
+    private boolean cityValide(String city) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(API_URL + "?q=" + city.replaceAll(" ", "+") + "&appid="
+                            + this.api_key))
+                    .build();
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
+
+            return response.statusCode() == 200;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

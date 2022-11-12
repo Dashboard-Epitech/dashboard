@@ -1,4 +1,4 @@
-package com.dashboard.api.Auth;
+package com.dashboard.api.Request;
 
 import lombok.Getter;
 import lombok.Setter;
