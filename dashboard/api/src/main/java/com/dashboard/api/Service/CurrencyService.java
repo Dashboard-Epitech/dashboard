@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Currency;
+import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Request.CurrencyRequest;
 import com.dashboard.api.Request.WidgetRequest;
 
@@ -29,29 +30,17 @@ public class CurrencyService extends WidgetService {
     private final static String API_URL_CONVERT_CURRENCI = "convert_from.json/";
 
     @Override
-    public Object createWidget() {
+    public <W extends WidgetRequest> Object createWidget(W request) throws Exception {
         Currency currency = new Currency();
 
-        widgetRepository.save(currency);
-
-        return currency;
+        return this.save(currency, (CurrencyRequest) request);
     }
 
     @Override
     public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
         Currency currency = super.getInstanceOf(Currency.class, id);
-        CurrencyRequest currencyRequest = (CurrencyRequest) request;
 
-        currency.setFromCurrency(currencyRequest.getFrom());
-
-        if (currencyRequest.getTo().isBlank())
-            currency.setToCurrencies(currencyRequest.getFrom());
-        else
-            currency.setToCurrencies(currencyRequest.getTo());
-
-        widgetRepository.save(currency);
-
-        return currency;
+        return this.save(currency, (CurrencyRequest) request);
     }
 
     @Override
@@ -86,6 +75,21 @@ public class CurrencyService extends WidgetService {
         HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
 
         return response.body();
+    }
+
+    @Override
+    protected <W extends Widget, R extends WidgetRequest> Object save(W currencyT, R requestT) throws Exception {
+        Currency currency = (Currency) currencyT;
+        CurrencyRequest request = (CurrencyRequest) requestT;
+
+        currency.setFromCurrency(request.getFrom());
+
+        if (request.getTo() == null || request.getTo().isBlank())
+            currency.setToCurrencies(request.getFrom());
+        else
+            currency.setToCurrencies(request.getTo().replaceAll(" ", ""));
+
+        return super.save(currency, request);
     }
 
     private HttpClient getClient() {

@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Entity.YoutubeChannel;
 import com.dashboard.api.Request.WidgetRequest;
 import com.dashboard.api.Request.YoutubeChannelRequest;
@@ -21,24 +22,17 @@ public class YoutubeChannelService extends YoutubeService {
     private final static String API_CHANNEL = "channels?part=statistics,snippet";
 
     @Override
-    public Object createWidget() {
+    public <W extends WidgetRequest> Object createWidget(W request) throws Exception {
         YoutubeChannel youtube = new YoutubeChannel();
 
-        widgetRepository.save(youtube);
-
-        return youtube;
+        return this.save(youtube, (YoutubeChannelRequest) request);
     }
 
     @Override
     public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
         YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id);
-        YoutubeChannelRequest youtubeChannelRequest = (YoutubeChannelRequest) request;
 
-        youtube.setChannel(youtubeChannelRequest.getChannel());
-
-        widgetRepository.save(youtube);
-
-        return youtube;
+        return this.save(youtube, (YoutubeChannelRequest) request);
     }
 
     @Override
@@ -77,5 +71,12 @@ public class YoutubeChannelService extends YoutubeService {
         System.out.println(response.body());
 
         return response.body();
+    }
+
+    @Override
+    protected <W extends Widget, R extends WidgetRequest> Object save(W youtube, R request) throws Exception {
+        ((YoutubeChannel) youtube).setChannel(((YoutubeChannelRequest) request).getChannel());
+
+        return super.save(youtube, request);
     }
 }

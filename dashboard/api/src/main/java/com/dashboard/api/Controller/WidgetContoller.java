@@ -26,8 +26,12 @@ public class WidgetContoller {
     @Autowired
     WidgetService widgetService;
 
-    public ResponseEntity<?> createWidget(WidgetService service) {
-        return ResponseEntity.ok().body(service.createWidget());
+    public ResponseEntity<?> createWidget(WidgetRequest request, WidgetService service) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createWidget(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> updateWidget(long id, WidgetRequest request, WidgetService service) {

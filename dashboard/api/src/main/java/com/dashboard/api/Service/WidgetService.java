@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dashboard.api.Entity.DashBoard;
 import com.dashboard.api.Entity.Widget;
+import com.dashboard.api.Repository.DashBoardRepository;
 import com.dashboard.api.Repository.WidgetRepository;
 import com.dashboard.api.Request.WidgetRequest;
 
@@ -17,6 +19,9 @@ public class WidgetService {
 
     @Autowired
     WidgetRepository widgetRepository;
+
+    @Autowired
+    DashBoardRepository dashBoardRepository;
 
     @SuppressWarnings("unchecked")
     protected <T extends Widget> T getInstanceOf(Class<T> clazz, long id)
@@ -34,7 +39,7 @@ public class WidgetService {
         return (T) temp2;
     }
 
-    public Object createWidget() {
+    public <W extends WidgetRequest> Object createWidget(W request) throws Exception {
         return null;
     }
 
@@ -55,6 +60,19 @@ public class WidgetService {
         Widget widget = optional.get();
 
         this.widgetRepository.delete(widget);
+
+        return widget;
+    }
+
+    protected <W extends Widget, R extends WidgetRequest> Object save(W widget, R request) throws Exception {
+        Optional<DashBoard> optional = this.dashBoardRepository.findById(request.getDashboard_id());
+
+        if (!optional.isPresent())
+            throw new Exception("dashboard " + request.getDashboard_id() + " not found");
+
+        widget.setDashBoard(optional.get());
+
+        this.widgetRepository.save(widget);
 
         return widget;
     }

@@ -20,9 +20,9 @@ public class WeatherController extends WidgetContoller {
     @Autowired
     WeatherService weatherService;
 
-    @RequestMapping(path = "/create")
-    public ResponseEntity<?> createWidget() {
-        return super.createWidget(this.weatherService);
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    public ResponseEntity<?> createWidget(@RequestBody @Valid WeatherRequest request) {
+        return super.createWidget(request, this.weatherService);
     }
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)

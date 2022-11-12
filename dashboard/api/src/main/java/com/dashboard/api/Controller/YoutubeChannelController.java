@@ -20,9 +20,9 @@ public class YoutubeChannelController extends WidgetContoller {
     @Autowired
     YoutubeChannelService youtubeChannelService;
 
-    @RequestMapping(path = "/create")
-    public ResponseEntity<?> createChannel() {
-        return super.createWidget(this.youtubeChannelService);
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    public ResponseEntity<?> createChannel(@RequestBody @Valid YoutubeChannelRequest request) {
+        return super.createWidget(request, this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)

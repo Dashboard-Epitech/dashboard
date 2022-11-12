@@ -19,9 +19,9 @@ public class CurrencyController extends WidgetContoller {
     @Autowired
     CurrencyService currencyService;
 
-    @RequestMapping(path = "/create")
-    public ResponseEntity<?> createWidget() {
-        return super.createWidget(this.currencyService);
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    public ResponseEntity<?> createWidget(@RequestBody @Valid CurrencyRequest request) {
+        return super.createWidget(request, this.currencyService);
     }
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
