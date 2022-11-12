@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Repository.WidgetRepository;
+import com.dashboard.api.Request.WidgetRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,11 +34,11 @@ public abstract class WidgetService {
         return (T) temp2;
     }
 
-    public Object createWidget(String body) {
+    public Object createWidget() {
         return null;
     }
 
-    public Object updateWidget(int id, String body) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
         return null;
     }
 

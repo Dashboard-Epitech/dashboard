@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dashboard.api.Request.YoutubeChannelRequest;
 import com.dashboard.api.Service.YoutubeChannelService;
 
 @Controller
@@ -18,12 +19,12 @@ public class YoutubeChannelController extends WidgetContoller {
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public Object createChannel(@RequestBody String body) {
-        return super.createWidget(body, this.youtubeChannelService);
+        return super.createWidget(this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/update/{id}", method = RequestMethod.POST)
-    public Object updateChannel(@PathVariable(value = "id") String id, @RequestBody String body) {
-        return super.updateWidget(Integer.parseInt(id), body, this.youtubeChannelService);
+    public Object updateChannel(@PathVariable(value = "id") String id, @RequestBody YoutubeChannelRequest request) {
+        return super.updateWidget(Integer.parseInt(id), request, this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/updateData/{id}")

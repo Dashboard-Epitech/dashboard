@@ -12,6 +12,6 @@ import lombok.Setter;
 @DiscriminatorValue("Currencie")
 public class Currencie extends Widget {
 
-    private String currencie1;
-    private String currencie2;
+    private String fromCurrency;
+    private String toCurrencies;
 }

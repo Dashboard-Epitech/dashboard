@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Currencie;
+import com.dashboard.api.Request.CurrencyRequest;
+import com.dashboard.api.Request.WidgetRequest;
 
 @Service
 public class CurrencieService extends WidgetService {
@@ -28,16 +30,8 @@ public class CurrencieService extends WidgetService {
     private final static String API_URL_CONVERT_CURRENCI = "convert_from.json/";
 
     @Override
-    public Object createWidget(String body) {
+    public Object createWidget() {
         Currencie currencie = new Currencie();
-        JSONObject input = new JSONObject(body);
-
-        String currencie1 = input.getString("currencie1");
-        String currencie2 = input.getString("currencie2");
-        if (!currencie1.isBlank())
-            currencie.setCurrencie1(currencie1);
-        if (!currencie2.isBlank())
-            currencie.setCurrencie2(currencie2);
 
         widgetRepository.save(currencie);
 
@@ -45,18 +39,16 @@ public class CurrencieService extends WidgetService {
     }
 
     @Override
-    public Object updateWidget(int id, String body) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
         Currencie currency = super.getInstanceOf(Currencie.class, id);
+        CurrencyRequest currencyRequest = (CurrencyRequest) request;
 
-        JSONObject input = new JSONObject(body);
+        currency.setFromCurrency(currencyRequest.getFrom());
 
-        String currency1 = input.getString("currency1");
-        String currency2 = input.getString("currency2");
-        if (!currency1.isBlank())
-            currency.setCurrencie1(currency1);
-
-        if (!currency2.isBlank())
-            currency.setCurrencie2(currency2);
+        if (currencyRequest.getTo().isBlank())
+            currency.setToCurrencies(currencyRequest.getFrom());
+        else
+            currency.setToCurrencies(currencyRequest.getTo());
 
         widgetRepository.save(currency);
 
@@ -67,14 +59,14 @@ public class CurrencieService extends WidgetService {
     public String updateData(int id) throws Exception {
         Currencie currencie = super.getInstanceOf(Currencie.class, id);
 
-        if (currencie.getCurrencie1() == null || currencie.getCurrencie2() == null)
+        if (currencie.getFromCurrency() == null || currencie.getToCurrencies() == null)
             throw new Exception("Not currencie");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
                         API_URL + API_URL_CONVERT_CURRENCI + "?from="
-                                + currencie.getCurrencie1()
-                                + "&to=" + currencie.getCurrencie2()))
+                                + currencie.getFromCurrency()
+                                + "&to=" + currencie.getToCurrencies()))
                 .build();
 
         HttpClient httpClient = this.getClient();

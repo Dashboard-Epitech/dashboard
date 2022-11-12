@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dashboard.api.Request.CurrencyRequest;
 import com.dashboard.api.Service.CurrencieService;
 
 @Controller
@@ -17,13 +18,13 @@ public class CurrencieController extends WidgetContoller {
     CurrencieService currencieService;
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public Object createWidget(@RequestBody String body) {
-        return super.createWidget(body, this.currencieService);
+    public Object createWidget() {
+        return super.createWidget(this.currencieService);
     }
 
     @RequestMapping(path = "/updateCurrencies/{id}", method = RequestMethod.POST)
-    public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody String body) {
-        return super.updateWidget(Integer.parseInt(id), body, this.currencieService);
+    public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody CurrencyRequest request) {
+        return super.updateWidget(Integer.parseInt(id), request, this.currencieService);
     }
 
     @RequestMapping(path = "/updateData/{id}")

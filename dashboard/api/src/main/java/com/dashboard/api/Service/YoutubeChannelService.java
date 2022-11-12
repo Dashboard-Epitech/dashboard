@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.YoutubeChannel;
+import com.dashboard.api.Request.WidgetRequest;
+import com.dashboard.api.Request.YoutubeChannelRequest;
 
 @Service
 public class YoutubeChannelService extends YoutubeService {
@@ -19,13 +21,8 @@ public class YoutubeChannelService extends YoutubeService {
     private final static String API_CHANNEL = "channels?part=statistics,snippet";
 
     @Override
-    public Object createWidget(String body) {
+    public Object createWidget() {
         YoutubeChannel youtube = new YoutubeChannel();
-        JSONObject input = new JSONObject(body);
-
-        String channel = input.getString("channel");
-        if (!channel.isBlank())
-            youtube.setChannel(channel);
 
         widgetRepository.save(youtube);
 
@@ -33,16 +30,11 @@ public class YoutubeChannelService extends YoutubeService {
     }
 
     @Override
-    public Object updateWidget(int id, String body) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
         YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id);
+        YoutubeChannelRequest youtubeChannelRequest = (YoutubeChannelRequest) request;
 
-        JSONObject input = new JSONObject(body);
-
-        String channel = input.getString("channel");
-        if (!channel.isBlank())
-            youtube.setChannel(channel);
-        else
-            youtube.setChannel(null);
+        youtube.setChannel(youtubeChannelRequest.getChannel());
 
         widgetRepository.save(youtube);
 

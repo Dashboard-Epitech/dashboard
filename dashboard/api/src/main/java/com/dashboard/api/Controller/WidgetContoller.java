@@ -3,19 +3,20 @@ package com.dashboard.api.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dashboard.api.Request.WidgetRequest;
 import com.dashboard.api.Service.WidgetService;
 
 @RestController
 @RequestMapping(path = "/widget")
 public abstract class WidgetContoller {
 
-    public Object createWidget(String body, WidgetService service) {
-        return service.createWidget(body);
+    public Object createWidget(WidgetService service) {
+        return service.createWidget();
     }
 
-    public Object updateWidget(int id, String body, WidgetService service) {
+    public Object updateWidget(int id, WidgetRequest request, WidgetService service) {
         try {
-            return service.updateWidget(id, body);
+            return service.updateWidget(id, request);
         } catch (Exception e) {
             return e.getMessage();
         }

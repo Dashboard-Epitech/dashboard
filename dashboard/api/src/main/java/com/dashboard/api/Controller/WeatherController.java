@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dashboard.api.Request.WeatherRequest;
 import com.dashboard.api.Service.WeatherService;
 
 @RestController
@@ -17,13 +18,13 @@ public class WeatherController extends WidgetContoller {
     WeatherService weatherService;
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public Object createWidget(@RequestBody String body) {
-        return super.createWidget(body, this.weatherService);
+    public Object createWidget() {
+        return super.createWidget(this.weatherService);
     }
 
     @RequestMapping(path = "/updateCity/{id}", method = RequestMethod.POST)
-    public Object UpdateCity(@PathVariable(value = "id") String id, @RequestBody String body) {
-        return super.updateWidget(Integer.parseInt(id), body, this.weatherService);
+    public Object UpdateCity(@PathVariable(value = "id") String id, @RequestBody WeatherRequest request) {
+        return super.updateWidget(Integer.parseInt(id), request, this.weatherService);
     }
 
     @RequestMapping(path = "/updateData/{id}")
