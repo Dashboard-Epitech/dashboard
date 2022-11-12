@@ -56,8 +56,12 @@ public class WeatherService extends WidgetService {
         if (weather.getCity() == null)
             throw new Exception(id + " have not city");
 
+        return this.weatherCity(weather.getCity());
+    }
+
+    public String weatherCity(String city) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(API_URL + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
+                .uri(new URI(API_URL + "?q=" + city.replaceAll(" ", "+") + "&appid="
                         + this.api_key))
                 .build();
 
