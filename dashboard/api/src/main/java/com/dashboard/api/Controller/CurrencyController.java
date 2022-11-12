@@ -27,12 +27,12 @@ public class CurrencyController extends WidgetContoller {
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateCurrencies(@PathVariable(value = "id") String id,
             @RequestBody @Valid CurrencyRequest request) {
-        return super.updateWidget(Integer.parseInt(id), request, this.currencyService);
+        return super.updateWidget(Long.parseLong(id), request, this.currencyService);
     }
 
     @RequestMapping(path = "/update/{id}")
     public ResponseEntity<?> UpdateDataWidget(@PathVariable(value = "id") String id) {
-        return super.updateData(Integer.parseInt(id), this.currencyService);
+        return super.updateData(Long.parseLong(id), this.currencyService);
     }
 
     @RequestMapping(path = "/getAll")

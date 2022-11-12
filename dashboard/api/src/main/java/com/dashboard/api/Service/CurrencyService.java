@@ -38,7 +38,7 @@ public class CurrencyService extends WidgetService {
     }
 
     @Override
-    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
         Currency currency = super.getInstanceOf(Currency.class, id);
         CurrencyRequest currencyRequest = (CurrencyRequest) request;
 
@@ -55,7 +55,7 @@ public class CurrencyService extends WidgetService {
     }
 
     @Override
-    public String updateData(int id) throws Exception {
+    public String updateData(long id) throws Exception {
         Currency currency = super.getInstanceOf(Currency.class, id);
 
         if (currency.getFromCurrency() == null || currency.getToCurrencies() == null)

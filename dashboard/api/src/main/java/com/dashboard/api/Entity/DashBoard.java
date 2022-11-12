@@ -3,6 +3,7 @@ package com.dashboard.api.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,8 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.Getter;
 import lombok.Setter;
+import net.bytebuddy.implementation.bind.annotation.SuperMethod;
 
 @Entity
 @Getter
@@ -21,14 +26,16 @@ public class DashBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private DashboardUser user;
 
-    @OneToMany(mappedBy = "dashBoard")
+    @OneToMany(mappedBy = "dashBoard", cascade = CascadeType.REMOVE)
     private List<Widget> widgets = new ArrayList<>();
+
+    private String name;
 
     public boolean addWidget(Widget widget) {
         widget.setDashBoard(this);

@@ -30,7 +30,7 @@ public class YoutubeChannelService extends YoutubeService {
     }
 
     @Override
-    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
         YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id);
         YoutubeChannelRequest youtubeChannelRequest = (YoutubeChannelRequest) request;
 
@@ -42,7 +42,7 @@ public class YoutubeChannelService extends YoutubeService {
     }
 
     @Override
-    public String updateData(int id) throws Exception {
+    public String updateData(long id) throws Exception {
         System.out.println(API_KEY);
         YoutubeChannel youtube = super.getInstanceOf(YoutubeChannel.class, id);
 

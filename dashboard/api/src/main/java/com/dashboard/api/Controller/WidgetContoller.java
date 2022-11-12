@@ -30,7 +30,7 @@ public class WidgetContoller {
         return ResponseEntity.ok().body(service.createWidget());
     }
 
-    public ResponseEntity<?> updateWidget(int id, WidgetRequest request, WidgetService service) {
+    public ResponseEntity<?> updateWidget(long id, WidgetRequest request, WidgetService service) {
         try {
             return ResponseEntity.ok().body(service.updateWidget(id, request));
         } catch (Exception e) {
@@ -38,7 +38,7 @@ public class WidgetContoller {
         }
     }
 
-    public ResponseEntity<?> updateData(int id, WidgetService service) {
+    public ResponseEntity<?> updateData(long id, WidgetService service) {
         try {
             return ResponseEntity.ok().body(service.updateData(id));
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class WidgetContoller {
     @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> remove(@PathVariable(value = "id") String id) {
         try {
-            return ResponseEntity.ok().body(widgetService.remove(Integer.parseInt(id)));
+            return ResponseEntity.ok().body(widgetService.remove(Long.parseLong(id)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -65,8 +65,8 @@ public class WidgetContoller {
             validationErrors.put(fieldName, errorMessage);
         });
 
-        WidgetResponseError weatherResponseError = new WidgetResponseError(validationErrors);
+        WidgetResponseError widgetResponseError = new WidgetResponseError(validationErrors);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(weatherResponseError.build());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(widgetResponseError.build());
     }
 }
