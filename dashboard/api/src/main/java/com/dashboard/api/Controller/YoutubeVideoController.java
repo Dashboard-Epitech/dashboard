@@ -17,18 +17,20 @@
 // YoutubeService youtubeService;
 
 // @RequestMapping(path = "create", method = RequestMethod.POST)
-// public Object createVideo(@RequestBody String body) {
+// public ResponseEntity<?> createVideo(@RequestBody String body) {
 // return super.createWidget(body, youtubeService);
 // }
 
 // @RequestMapping(path = "update/{id}", method = RequestMethod.POST)
-// public Object updateVideo(@PathVariable(value = "id") String id, @RequestBody
+// public ResponseEntity<?> updateVideo(@PathVariable(value = "id") String id,
+// @RequestBody
 // String body) {
 // return super.updateWidget(Integer.parseInt(id), body, youtubeService);
 // }
 
 // @RequestMapping(path = "/updateData/{id}")
-// public Object UpdateDataVideo(@PathVariable(value = "id") String id) {
+// public ResponseEntity<?> UpdateDataVideo(@PathVariable(value = "id") String
+// id) {
 // return super.updateData(Integer.parseInt(id), youtubeService);
 // }
 // }

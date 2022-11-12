@@ -18,7 +18,7 @@ public class DashBoardController {
     DashBoardService dashboardService;
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public Object createDashBoard(@RequestBody String body) {
+    public ResponseEntity<?> createDashBoard(@RequestBody String body) {
         try {
             DashBoard dashBoard = (DashBoard) this.dashboardService.createDashBoard(body);
             return new ResponseEntity<Integer>(dashBoard.getId(), HttpStatus.OK);
@@ -28,7 +28,7 @@ public class DashBoardController {
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public Object addWidget(@RequestBody String body) {
+    public ResponseEntity<?> addWidget(@RequestBody String body) {
         try {
             DashBoard dashBoard = (DashBoard) this.dashboardService.addWidget(body);
             return new ResponseEntity<Integer>(dashBoard.getId(), HttpStatus.OK);

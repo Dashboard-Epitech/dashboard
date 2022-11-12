@@ -18,17 +18,18 @@ public class YoutubeChannelController extends WidgetContoller {
     YoutubeChannelService youtubeChannelService;
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public Object createChannel(@RequestBody String body) {
+    public ResponseEntity<?> createChannel(@RequestBody String body) {
         return super.createWidget(this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.POST)
-    public Object updateChannel(@PathVariable(value = "id") String id, @RequestBody YoutubeChannelRequest request) {
+    public ResponseEntity<?> updateChannel(@PathVariable(value = "id") String id,
+            @RequestBody YoutubeChannelRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/update/{id}")
-    public Object UpdateDataWidget(@PathVariable(value = "id") String id) {
+    public ResponseEntity<?> UpdateDataWidget(@PathVariable(value = "id") String id) {
         return super.updateData(Integer.parseInt(id), this.youtubeChannelService);
     }
 }
