@@ -27,3 +27,19 @@ export const getUserData = (email, token) => {
 
     return axios.post(BASE_URL + 'user/get', body, {headers}); 
 }
+
+export const getWeather = (city) => {
+    return axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=248f71af2576da84a291a06fba0a8fdd`)
+}
+
+// export const getUserWidgets = (id, token) => {
+//     const headers = {
+//         'Authorization': 'Bearer ' + token,
+//     }
+    
+//     const body = {
+//         id: id
+//     }
+
+//     return axios.post(BASE_URL + 'dashboard/get', body, {headers});
+// }

@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { FaDollarSign, FaSpotify, FaYoutube } from "react-icons/fa";
 import { TiWeatherPartlySunny } from 'react-icons/ti'
 import epitechLogo from "../../../icons/gege.png"
+import pepe from "../../../icons/pepe.png"
 
 import { useGlobalState } from "../../../state"
 
@@ -50,7 +51,7 @@ export const WidgetTypesGrid = () => {
                 <GridItem>
                     <Flex h={"100%"} justifyContent={"space-between"} alignItems={"center"} flexDir="column" p={4} backgroundColor="gray.600" borderRadius={"20px"}>
                         <Flex>
-                            <Image boxSize={"60px"} src='https://assets.stickpng.com/images/5845cd430b2a3b54fdbaecf8.png' />
+                            <Image boxSize={"60px"} src={pepe} />
                         </Flex>
                         <Flex>
                             <Text fontWeight={"bold"} fontSize="2xl">Memes</Text>
