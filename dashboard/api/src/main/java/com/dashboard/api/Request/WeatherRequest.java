@@ -1,0 +1,12 @@
+package com.dashboard.api.Request;
+
+import javax.validation.constraints.NotBlank;
+
+import lombok.Getter;
+
+@Getter
+public class WeatherRequest extends WidgetRequest {
+
+    @NotBlank(message = "Please enter a city.")
+    private String city;
+}
