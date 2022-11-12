@@ -8,34 +8,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dashboard.api.Request.CurrencyRequest;
-import com.dashboard.api.Service.CurrencieService;
+import com.dashboard.api.Service.CurrencyService;
 
 @Controller
-@RequestMapping("widget/currencie")
-public class CurrencieController extends WidgetContoller {
+@RequestMapping("widget/currency")
+public class CurrencyController extends WidgetContoller {
 
     @Autowired
-    CurrencieService currencieService;
+    CurrencyService currencyService;
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public Object createWidget() {
-        return super.createWidget(this.currencieService);
+        return super.createWidget(this.currencyService);
     }
 
-    @RequestMapping(path = "/updateCurrencies/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.POST)
     public Object updateCurrencies(@PathVariable(value = "id") String id, @RequestBody CurrencyRequest request) {
-        return super.updateWidget(Integer.parseInt(id), request, this.currencieService);
+        return super.updateWidget(Integer.parseInt(id), request, this.currencyService);
     }
 
-    @RequestMapping(path = "/updateData/{id}")
+    @RequestMapping(path = "/update/{id}")
     public Object UpdateDataWidget(@PathVariable(value = "id") String id) {
-        return super.updateData(Integer.parseInt(id), this.currencieService);
+        return super.updateData(Integer.parseInt(id), this.currencyService);
     }
 
     @RequestMapping(path = "/getAll")
-    public Object getAllCurrencie() {
+    public Object getAllCurrencies() {
         try {
-            return this.currencieService.getAllCurrencie();
+            return this.currencyService.getAllCurrencies();
         } catch (Exception e) {
             return e.getMessage();
         }

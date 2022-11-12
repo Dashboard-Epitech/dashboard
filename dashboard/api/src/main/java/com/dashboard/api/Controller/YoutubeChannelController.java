@@ -22,12 +22,12 @@ public class YoutubeChannelController extends WidgetContoller {
         return super.createWidget(this.youtubeChannelService);
     }
 
-    @RequestMapping(path = "/update/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/update/field/{id}", method = RequestMethod.POST)
     public Object updateChannel(@PathVariable(value = "id") String id, @RequestBody YoutubeChannelRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.youtubeChannelService);
     }
 
-    @RequestMapping(path = "/updateData/{id}")
+    @RequestMapping(path = "/update/{id}")
     public Object UpdateDataWidget(@PathVariable(value = "id") String id) {
         return super.updateData(Integer.parseInt(id), this.youtubeChannelService);
     }

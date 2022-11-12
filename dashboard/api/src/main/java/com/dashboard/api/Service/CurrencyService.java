@@ -12,12 +12,12 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.dashboard.api.Entity.Currencie;
+import com.dashboard.api.Entity.Currency;
 import com.dashboard.api.Request.CurrencyRequest;
 import com.dashboard.api.Request.WidgetRequest;
 
 @Service
-public class CurrencieService extends WidgetService {
+public class CurrencyService extends WidgetService {
 
     @Value("${CURRENCIES_API_USERNAME}")
     private String API_USERNAME;
@@ -31,16 +31,16 @@ public class CurrencieService extends WidgetService {
 
     @Override
     public Object createWidget() {
-        Currencie currencie = new Currencie();
+        Currency currency = new Currency();
 
-        widgetRepository.save(currencie);
+        widgetRepository.save(currency);
 
-        return currencie;
+        return currency;
     }
 
     @Override
     public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
-        Currencie currency = super.getInstanceOf(Currencie.class, id);
+        Currency currency = super.getInstanceOf(Currency.class, id);
         CurrencyRequest currencyRequest = (CurrencyRequest) request;
 
         currency.setFromCurrency(currencyRequest.getFrom());
@@ -57,16 +57,16 @@ public class CurrencieService extends WidgetService {
 
     @Override
     public String updateData(int id) throws Exception {
-        Currencie currencie = super.getInstanceOf(Currencie.class, id);
+        Currency currency = super.getInstanceOf(Currency.class, id);
 
-        if (currencie.getFromCurrency() == null || currencie.getToCurrencies() == null)
-            throw new Exception("Not currencie");
+        if (currency.getFromCurrency() == null || currency.getToCurrencies() == null)
+            throw new Exception("Not currency");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
                         API_URL + API_URL_CONVERT_CURRENCI + "?from="
-                                + currencie.getFromCurrency()
-                                + "&to=" + currencie.getToCurrencies()))
+                                + currency.getFromCurrency()
+                                + "&to=" + currency.getToCurrencies()))
                 .build();
 
         HttpClient httpClient = this.getClient();
@@ -76,7 +76,7 @@ public class CurrencieService extends WidgetService {
         return response.body();
     }
 
-    public String getAllCurrencie() throws Exception {
+    public String getAllCurrencies() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
                         API_URL + API_URL_ALL_CURRENCIES))

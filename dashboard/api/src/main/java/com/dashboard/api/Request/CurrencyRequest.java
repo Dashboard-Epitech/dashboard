@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class CurrencyRequest extends WidgetRequest {
 
-    @NotBlank(message = "Please enter a from currenci.")
+    @NotBlank(message = "Please enter a from currency.")
     private String from;
 
     private String to;
