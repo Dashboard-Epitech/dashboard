@@ -82,7 +82,11 @@ public class DashboardUser implements UserDetails {
 
   public DashboardUser toSafeData() {
     DashboardUser safeData = new DashboardUser();
-    safeData.setUsername(username).setEmail(email).setRoles(roles).setVerified(verified);
+    safeData.setUsername(username)
+            .setId(id)
+            .setEmail(email)
+            .setRoles(roles)
+            .setVerified(verified);
 
     return safeData;
   }

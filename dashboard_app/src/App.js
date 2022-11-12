@@ -24,7 +24,7 @@ function App() {
       }
     })
   }, [])
-  
+
   return (
     <>
       <BrowserRouter>
@@ -33,17 +33,18 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="widgets" element={<WidgetMenu />}>
               <Route path="controls" element={<WidgetControls />}>
-                <Route path="new" element={<NewWidget />} />
-                  <Route path="weather" element={<NewWeather />}/>
+                <Route path="new" element={<NewWidget />}>
+                  <Route path="weather" element={<NewWeather />} />
                 </Route>
               </Route>
             </Route>
-            <Route path="/auth" element={<AuthPage />}>
-              <Route path='login' element={<LoginForm />}>
-                <Route path='verified' element={<AlertSuccess alertContent="Account Verified. Please log in !" />} />
-              </Route>
-              <Route path='register' element={<RegisterForm />} />
+          </Route>
+          <Route path="/auth" element={<AuthPage />}>
+            <Route path='login' element={<LoginForm />}>
+              <Route path='verified' element={<AlertSuccess alertContent="Account Verified. Please log in !" />} />
             </Route>
+            <Route path='register' element={<RegisterForm />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

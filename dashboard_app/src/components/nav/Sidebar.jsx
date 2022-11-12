@@ -1,17 +1,20 @@
-import { Avatar, Divider, Flex, Heading, IconButton, Spacer, Switch, Text, useColorMode, useColorModeValue } from "@chakra-ui/react"
+import { Avatar, Button, Divider, Flex, Heading, IconButton, Spacer, Switch, Text, useColorMode, useColorModeValue, useDisclosure } from "@chakra-ui/react"
 import { useState } from "react";
 import { FaCaretLeft, FaChevronLeft, FaChevronRight, FaCog, FaHome, FaMoon, FaSun, FaUser, FaUserCircle } from "react-icons/fa"
 import { MdSecurity, MdWidgets } from "react-icons/md";
 import { ImExit } from "react-icons/im";
 import { SidebarItem } from "./SidebarItem";
 import { useGlobalState } from "../../state";
+import LogoutModal from "../modals/LogoutModal";
+import { SidebarLogout } from "./SidebarLogout";
 
 export const Sidebar = () => {
     const [user, setUser] = useGlobalState('user')
     const [navSize, setNavSize] = useState("large");
     const { toggleColorMode } = useColorMode();
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const colorIcons = useColorModeValue(<FaSun />, <FaMoon />);
-    const sideBarBackground = useColorModeValue("gray.300", "gray.600")
+    const sideBarBackground = useColorModeValue("gray.300", "gray.600");
 
     return (
         <Flex
@@ -48,7 +51,7 @@ export const Sidebar = () => {
                 <SidebarItem navSize={navSize} icon={<MdWidgets size={"1.3rem"} />} title="Widgets" target="/widgets/controls" />
                 <SidebarItem navSize={navSize} icon={<MdSecurity size={"1.3rem"} />} title="Authorizations" target="/authorize"/>
                 <SidebarItem navSize={navSize} icon={<FaCog size={"1.3rem"} />} title="Settings" target="/settings"/>
-                <SidebarItem navSize={navSize} icon={<ImExit size={"1.3rem"} />} title="Logout" alignSelf="end" target="/logout"/>
+                <SidebarLogout navSize={navSize} icon={<ImExit size={"1.3rem"} />} title="Logout" onClick={onOpen}/>
             </Flex>
             <Flex
                 p={"5%"}
@@ -79,8 +82,8 @@ export const Sidebar = () => {
                         <Text>{user.role}</Text>
                     </Flex>
                 </Flex>
-
             </Flex>
+            <LogoutModal isOpen={isOpen} onClose={onClose} />
         </Flex>
     )
 }

@@ -1,13 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
-import { Menu, MenuButton, Button, MenuList, MenuItem, useDisclosure } from "@chakra-ui/react";
-import { FaChevronDown, FaCog, FaUser, FaUserCircle } from "react-icons/fa";
+import { Menu, MenuButton, Button, MenuList, MenuItem, useDisclosure, Flex } from "@chakra-ui/react";
+import { FaChevronDown, FaCog, FaGithub, FaLinkedin, FaTwitter, FaUser, FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useGlobalState, setGlobalState } from "../../state";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
+import LogoutModal from "../modals/LogoutModal";
 
 
-const NavMenu = () => {
+export const Socials = () => {
     const [user, setUser] = useGlobalState("user");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,35 +16,17 @@ const NavMenu = () => {
         backgroundColor: 'transparent'
     }
 
+    const triggerLogoutModal = () => {
+        return(
+            <LogoutModal />
+        )
+    }
+
     return (
-        <Menu>
-            <MenuButton as={Button} leftIcon={<FaUserCircle size={"1.5rem"}/>} rightIcon={<FaChevronDown />} style={menuStyle}>
-                {user.username}
-            </MenuButton>
-            <MenuList>
-                {!user &&
-                    <>
-                        <MenuItem as={Link} to="/auth/login">
-                            Login
-                        </MenuItem>
-                        <MenuItem>
-                            Register
-                        </MenuItem>
-                    </>
-                }
-                {user &&
-                    <>
-                        <MenuItem as={Link} to="dashboard/logout">
-                            Logout
-                        </MenuItem>
-                        <MenuItem as={Button} leftIcon={<FaCog />} style={menuStyle}>
-                            Settings
-                        </MenuItem>
-                    </>
-                }
-            </MenuList>
-        </Menu >
+        <Flex w={"10%"} justifyContent="space-around">
+            <FaGithub size={"1.8rem"}/>
+            <FaLinkedin size={"1.8rem"}/>
+            <FaTwitter size={"1.8rem"}/>
+        </Flex>
     )
 }
-
-export default NavMenu;

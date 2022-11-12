@@ -56,6 +56,7 @@ export const LoginForm = () => {
                 ajax.getUserData(response.data.email, response.data.accessToken)
                     .then((response2) => {
                         var userData = {
+                            id: response2.data.id,
                             username: response2.data.username,
                             email: response2.data.email,
                             roles: response2.data.roles,
