@@ -14,5 +14,5 @@ public class Weather extends Widget {
 
     private String city;
 
-    private boolean isCelsius;
+    private Boolean isCelsius;
 }

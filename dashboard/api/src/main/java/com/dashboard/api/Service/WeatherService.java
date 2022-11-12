@@ -41,7 +41,7 @@ public class WeatherService extends WidgetService {
             throw new Exception(city + " not found");
 
         weather.setCity(city);
-        weather.setCelsius(isCelsius);
+        weather.setIsCelsius(isCelsius);
 
         widgetRepository.save(weather);
 
@@ -58,7 +58,7 @@ public class WeatherService extends WidgetService {
         if (weather.getCity() == null)
             throw new Exception(id + " have not city");
 
-        return this.weatherCity(weather.getCity(), weather.isCelsius());
+        return this.weatherCity(weather.getCity(), weather.getIsCelsius());
     }
 
     public String weatherCity(String city, boolean isCelsius) throws Exception {
