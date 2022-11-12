@@ -34,9 +34,9 @@ public class WeatherController extends WidgetContoller {
     }
 
     @RequestMapping(path = "/search", method = RequestMethod.POST)
-    public ResponseEntity<?> shearchCity(@RequestBody WeatherRequest city) {
+    public ResponseEntity<?> shearchCity(@RequestBody WeatherRequest body) {
         try {
-            return ResponseEntity.ok().body(this.weatherService.weatherCity(city.getCity()));
+            return ResponseEntity.ok().body(this.weatherService.weatherCity(body.getCity(), body.getIsCelsius()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
