@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.api.Entity.DashBoard;
 import com.dashboard.api.Error.DashboardResponseError;
-import com.dashboard.api.Error.WidgetResponseError;
 import com.dashboard.api.Request.DashBoardRequest;
 import com.dashboard.api.Request.DashboardAddWidgetRequest;
 import com.dashboard.api.Service.DashBoardService;

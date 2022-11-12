@@ -12,12 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import lombok.Getter;
 import lombok.Setter;
-import net.bytebuddy.implementation.bind.annotation.SuperMethod;
 
 @Entity
 @Getter
