@@ -25,12 +25,12 @@
 // @RequestMapping(path = "update/{id}", method = RequestMethod.POST)
 // public ResponseEntity<?> updateVideo(@PathVariable(value = "id") String id,
 // @RequestBody String body) {
-// return super.updateWidget(Integer.parseInt(id), body, youtubeService);
+// return super.updateWidget(Long.parseLong(id), body, youtubeService);
 // }
 
 // @RequestMapping(path = "/updateData/{id}")
 // public ResponseEntity<?> UpdateDataVideo(@PathVariable(value = "id") String
 // id) {
-// return super.updateData(Integer.parseInt(id), youtubeService);
+// return super.updateData(Long.parseLong(id), youtubeService);
 // }
 // }

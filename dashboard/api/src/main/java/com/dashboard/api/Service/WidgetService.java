@@ -19,7 +19,7 @@ public class WidgetService {
     WidgetRepository widgetRepository;
 
     @SuppressWarnings("unchecked")
-    protected <T extends Widget> T getInstanceOf(Class<T> clazz, int id)
+    protected <T extends Widget> T getInstanceOf(Class<T> clazz, long id)
             throws Exception {
         Optional<Widget> temp = widgetRepository.findById(id);
 
@@ -38,15 +38,15 @@ public class WidgetService {
         return null;
     }
 
-    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
         return null;
     }
 
-    public Object updateData(int id) throws Exception {
+    public Object updateData(long id) throws Exception {
         return null;
     }
 
-    public Object remove(int id) throws Exception {
+    public Object remove(long id) throws Exception {
         Optional<Widget> optional = this.widgetRepository.findById(id);
 
         if (!optional.isPresent())

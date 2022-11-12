@@ -28,12 +28,12 @@ public class WeatherController extends WidgetContoller {
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> UpdateCity(@PathVariable(value = "id") String id,
             @RequestBody @Valid WeatherRequest request) {
-        return super.updateWidget(Integer.parseInt(id), request, this.weatherService);
+        return super.updateWidget(Long.parseLong(id), request, this.weatherService);
     }
 
     @RequestMapping(path = "/update/{id}")
     public ResponseEntity<?> UpdateDataWidget(@PathVariable(value = "id") String id) {
-        return super.updateData(Integer.parseInt(id), this.weatherService);
+        return super.updateData(Long.parseLong(id), this.weatherService);
     }
 
     @RequestMapping(path = "/search", method = RequestMethod.POST)

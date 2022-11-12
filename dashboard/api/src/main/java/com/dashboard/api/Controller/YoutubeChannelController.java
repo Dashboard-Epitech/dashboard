@@ -28,11 +28,11 @@ public class YoutubeChannelController extends WidgetContoller {
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateChannel(@PathVariable(value = "id") String id,
             @RequestBody @Valid YoutubeChannelRequest request) {
-        return super.updateWidget(Integer.parseInt(id), request, this.youtubeChannelService);
+        return super.updateWidget(Long.parseLong(id), request, this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/update/{id}")
     public ResponseEntity<?> UpdateDataWidget(@PathVariable(value = "id") String id) {
-        return super.updateData(Integer.parseInt(id), this.youtubeChannelService);
+        return super.updateData(Long.parseLong(id), this.youtubeChannelService);
     }
 }

@@ -31,7 +31,7 @@ public class WeatherService extends WidgetService {
     }
 
     @Override
-    public <W extends WidgetRequest> Object updateWidget(int id, W request) throws Exception {
+    public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
         Weather weather = super.getInstanceOf(Weather.class, id);
         WeatherRequest weatherRequest = (WeatherRequest) request;
         String city = weatherRequest.getCity();
@@ -49,10 +49,7 @@ public class WeatherService extends WidgetService {
     }
 
     @Override
-    public String updateData(int id) throws Exception {
-        System.out.println("API KEY : ");
-        System.out.println(this.api_key);
-        System.out.println("END");
+    public String updateData(long id) throws Exception {
         Weather weather = super.getInstanceOf(Weather.class, id);
 
         if (weather.getCity() == null)
