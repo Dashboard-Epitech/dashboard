@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.ConstraintViolationException;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -71,13 +69,13 @@ public class UserService {
         }
 
         user.get()
-            .setUsername(userFormData.getUsername())
-            .setEmail(userFormData.getEmail())
-            .setPassword(userFormData.getPassword());
-        
+                .setUsername(userFormData.getUsername())
+                .setEmail(userFormData.getEmail())
+                .setPassword(userFormData.getPassword());
+
         return userRepository.save(user.get());
     }
-    
+
     public DashboardUser registerUser(DashboardUser user) throws Exception {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -91,7 +89,7 @@ public class UserService {
             mailService.sendVerificationMail(user, verificationCode);
 
             return user;
-        } catch(Exception validationEx) {
+        } catch (Exception validationEx) {
             throw validationEx;
         }
     }
@@ -102,12 +100,12 @@ public class UserService {
             if (!user.isPresent()) {
                 throw new UserNotFoundException();
             }
-    
+
             if (verificationCode.equals(user.get().getVerificationCode())) {
                 user.get().setVerified(true);
                 user.get().setVerificationCode(null);
             }
-    
+
             return userRepository.save(user.get());
         } catch (Exception ex) {
             throw ex;
@@ -119,9 +117,9 @@ public class UserService {
     }
 
     public void setUserRole(String email, String roleName) {
-        DashboardUser user = userRepository.findByEmail(email).get();   
+        DashboardUser user = userRepository.findByEmail(email).get();
         Role role = roleRepository.findByName(roleName);
-        
+
         user.getRoles().add(role);
     }
 }
