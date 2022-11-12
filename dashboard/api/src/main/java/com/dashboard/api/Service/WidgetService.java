@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public abstract class WidgetService {
+public class WidgetService {
 
     @Autowired
     WidgetRepository widgetRepository;
@@ -44,5 +44,18 @@ public abstract class WidgetService {
 
     public Object updateData(int id) throws Exception {
         return null;
+    }
+
+    public Object remove(int id) throws Exception {
+        Optional<Widget> optional = this.widgetRepository.findById(id);
+
+        if (!optional.isPresent())
+            throw new Exception(id + " not found");
+
+        Widget widget = optional.get();
+
+        this.widgetRepository.delete(widget);
+
+        return widget;
     }
 }
