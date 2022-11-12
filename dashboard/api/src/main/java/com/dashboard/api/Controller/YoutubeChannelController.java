@@ -1,5 +1,7 @@
 package com.dashboard.api.Controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,13 +21,13 @@ public class YoutubeChannelController extends WidgetContoller {
     YoutubeChannelService youtubeChannelService;
 
     @RequestMapping(path = "/create")
-    public ResponseEntity<?> createChannel(@RequestBody String body) {
+    public ResponseEntity<?> createChannel() {
         return super.createWidget(this.youtubeChannelService);
     }
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateChannel(@PathVariable(value = "id") String id,
-            @RequestBody YoutubeChannelRequest request) {
+            @RequestBody @Valid YoutubeChannelRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.youtubeChannelService);
     }
 

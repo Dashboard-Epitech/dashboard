@@ -35,11 +35,13 @@ public class WeatherService extends WidgetService {
         Weather weather = super.getInstanceOf(Weather.class, id);
         WeatherRequest weatherRequest = (WeatherRequest) request;
         String city = weatherRequest.getCity();
+        boolean isCelsius = weatherRequest.getIsCelsius();
 
         if (!this.cityValide(city))
             throw new Exception(city + " not found");
 
         weather.setCity(city);
+        weather.setIsCelsius(isCelsius);
 
         widgetRepository.save(weather);
 
@@ -56,9 +58,13 @@ public class WeatherService extends WidgetService {
         if (weather.getCity() == null)
             throw new Exception(id + " have not city");
 
+        return this.weatherCity(weather.getCity(), weather.getIsCelsius());
+    }
+
+    public String weatherCity(String city, boolean isCelsius) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(API_URL + "?q=" + weather.getCity().replaceAll(" ", "+") + "&appid="
-                        + this.api_key))
+                .uri(new URI(API_URL + "?q=" + city.replaceAll(" ", "+") + "&appid="
+                        + this.api_key + "&units=" + (isCelsius ? "metric" : "imperial")))
                 .build();
 
         HttpClient httpClient = HttpClient.newHttpClient();

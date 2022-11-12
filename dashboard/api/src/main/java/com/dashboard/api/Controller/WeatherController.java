@@ -1,5 +1,7 @@
 package com.dashboard.api.Controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +26,23 @@ public class WeatherController extends WidgetContoller {
     }
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
-    public ResponseEntity<?> UpdateCity(@PathVariable(value = "id") String id, @RequestBody WeatherRequest request) {
+    public ResponseEntity<?> UpdateCity(@PathVariable(value = "id") String id,
+            @RequestBody @Valid WeatherRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.weatherService);
     }
 
     @RequestMapping(path = "/update/{id}")
     public ResponseEntity<?> UpdateDataWidget(@PathVariable(value = "id") String id) {
         return super.updateData(Integer.parseInt(id), this.weatherService);
+    }
+
+    @RequestMapping(path = "/search", method = RequestMethod.POST)
+    public ResponseEntity<?> shearchCity(@RequestBody @Valid WeatherRequest body) {
+        try {
+            return ResponseEntity.ok().body(this.weatherService.weatherCity(body.getCity(), body.getIsCelsius()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

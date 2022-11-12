@@ -1,5 +1,7 @@
 package com.dashboard.api.Controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -7,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.dashboard.api.Request.CurrencyRequest;
 import com.dashboard.api.Service.CurrencyService;
 
@@ -25,7 +26,7 @@ public class CurrencyController extends WidgetContoller {
 
     @RequestMapping(path = "/update/field/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateCurrencies(@PathVariable(value = "id") String id,
-            @RequestBody CurrencyRequest request) {
+            @RequestBody @Valid CurrencyRequest request) {
         return super.updateWidget(Integer.parseInt(id), request, this.currencyService);
     }
 
@@ -42,5 +43,4 @@ public class CurrencyController extends WidgetContoller {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }
