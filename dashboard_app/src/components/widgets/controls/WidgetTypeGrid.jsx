@@ -3,8 +3,6 @@ import { WidgetType } from "./NewWidgetDrawer";
 import { useContext } from "react";
 import { FaDollarSign, FaSpotify, FaYoutube } from "react-icons/fa";
 import { TiWeatherPartlySunny } from 'react-icons/ti'
-import epitechLogo from "../../../icons/gege.png"
-import pepe from "../../../icons/pepe.png"
 
 import { useGlobalState } from "../../../state"
 
@@ -51,7 +49,7 @@ export const WidgetTypesGrid = () => {
                 <GridItem>
                     <Flex h={"100%"} justifyContent={"space-between"} alignItems={"center"} flexDir="column" p={4} backgroundColor="gray.600" borderRadius={"20px"}>
                         <Flex>
-                            <Image boxSize={"60px"} src={pepe} />
+                            <Image boxSize={"60px"} src="/icons/pepe.png" />
                         </Flex>
                         <Flex>
                             <Text fontWeight={"bold"} fontSize="2xl">Memes</Text>
@@ -72,7 +70,7 @@ export const WidgetTypesGrid = () => {
                 <GridItem>
                     <Flex h={"100%"} justifyContent={"space-between"} alignItems={"center"} flexDir="column" p={4} backgroundColor="gray.600" borderRadius={"20px"}>
                         <Flex>
-                            <Image boxSize={"60px"} src={epitechLogo} />
+                            <Image boxSize={"60px"} src="/icons/gege.png" />
                         </Flex>
                         <Flex>
                             <Text fontWeight={"bold"} fontSize="2xl">Epitech</Text>
