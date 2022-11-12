@@ -18,7 +18,7 @@ public class CurrencyController extends WidgetContoller {
     @Autowired
     CurrencyService currencyService;
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/create")
     public ResponseEntity<?> createWidget() {
         return super.createWidget(this.currencyService);
     }
@@ -42,4 +42,5 @@ public class CurrencyController extends WidgetContoller {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

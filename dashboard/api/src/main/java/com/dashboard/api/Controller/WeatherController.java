@@ -18,7 +18,7 @@ public class WeatherController extends WidgetContoller {
     @Autowired
     WeatherService weatherService;
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/create")
     public ResponseEntity<?> createWidget() {
         return super.createWidget(this.weatherService);
     }
@@ -32,4 +32,5 @@ public class WeatherController extends WidgetContoller {
     public ResponseEntity<?> UpdateDataWidget(@PathVariable(value = "id") String id) {
         return super.updateData(Integer.parseInt(id), this.weatherService);
     }
+
 }
