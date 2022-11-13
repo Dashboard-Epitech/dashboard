@@ -1,4 +1,4 @@
-package com.dashboard.api.Auth;
+package com.dashboard.api.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuthResponse {
-    private String email; 
+    private String email;
     private String accessToken;
 }

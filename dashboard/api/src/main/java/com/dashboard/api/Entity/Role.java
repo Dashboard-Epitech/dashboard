@@ -9,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -32,6 +30,6 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
     private Collection<DashboardUser> users;
-  
+
     private String name;
 }

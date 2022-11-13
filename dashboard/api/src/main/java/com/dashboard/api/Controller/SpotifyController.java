@@ -52,6 +52,7 @@ public class SpotifyController {
     @GetMapping("token")
     public ResponseEntity<?> spotifyToken(@AuthenticationPrincipal DashboardUser user,
             @RequestParam("code") String userCode, HttpServletResponse response) throws IOException {
+            throws IOException {
         try {
             SpotifyApi spotifyApi = spotifyService.getSpotifyApi();
             AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(userCode).build();
@@ -60,9 +61,7 @@ public class SpotifyController {
 
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-
             spotifyService.setSpotifyToken(user.getId(), spotifyApi.getAccessToken(), spotifyApi.getRefreshToken());
-
             return ResponseEntity.ok().body(spotifyApi.getAccessToken());
         } catch (Exception ex) {
             return ResponseEntity.internalServerError().body(ex.getMessage());
@@ -113,20 +112,4 @@ public class SpotifyController {
             return ResponseEntity.internalServerError().body(ex.getMessage());
         }
     }
-
-    // @GetMapping("playlist/tracks/{id}") 
-    // public ResponseEntity<?> getUserPlaylistTracks(@AuthenticationPrincipal DashboardUser user, @PathVariable("id") String playListId) {
-    //     try {
-    //         String spotifyAccessToken = userService.getUserSpotifyToken(user.getId());
-    //         SpotifyApi spotifyApi = spotifyService.geSpotifyApi();
-    //         spotifyApi.setAccessToken(spotifyAccessToken);
-
-    //         final GetPlaylistsItemsRequest getPlaylistsItemsRequest = spotifyApi.getPlaylistsItems(playListId).build();
-    //         final Paging<PlaylistTrack> playlistTracksPagin = getPlaylistsItemsRequest.execute();
-
-    //         return ResponseEntity.ok().body(playlistTracksPagin.getItems());
-    //     } catch (Exception ex) {
-    //         return ResponseEntity.internalServerError().body(ex.getMessage());
-    //     }
-    // }
 }

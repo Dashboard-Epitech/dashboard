@@ -1,4 +1,4 @@
-package com.dashboard.api.Auth;
+package com.dashboard.api.Request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

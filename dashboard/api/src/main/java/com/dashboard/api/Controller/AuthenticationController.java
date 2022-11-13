@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.dashboard.api.Auth.AuthRequest;
-import com.dashboard.api.Auth.AuthResponse;
+import com.dashboard.api.Request.AuthRequest;
+import com.dashboard.api.Request.AuthResponse;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Error.BadCredentialsResponseError;
 import com.dashboard.api.Error.BadUserFormResponseError;
@@ -57,7 +57,8 @@ public class AuthenticationController {
 			@PathVariable("verificationCode") String verificationCode) {
 		try {
 			userService.verifyUser(id, verificationCode);
-			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("http://localhost:3000/auth/login/verified")).build();
+			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+					.location(URI.create("http://localhost:3000/auth/login/verified")).build();
 		} catch (Exception ex) {
 			return ResponseEntity.internalServerError().body(ex.getMessage());
 		}

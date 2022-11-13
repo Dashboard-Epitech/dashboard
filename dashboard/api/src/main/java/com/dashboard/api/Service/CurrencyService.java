@@ -8,14 +8,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.dashboard.api.Entity.Currencie;
+import com.dashboard.api.Entity.Currency;
+import com.dashboard.api.Entity.Widget;
+import com.dashboard.api.Request.CurrencyRequest;
+import com.dashboard.api.Request.WidgetRequest;
 
 @Service
-public class CurrencieService extends WidgetService {
+public class CurrencyService extends WidgetService {
 
     @Value("${CURRENCIES_API_USERNAME}")
     private String API_USERNAME;
@@ -28,53 +30,31 @@ public class CurrencieService extends WidgetService {
     private final static String API_URL_CONVERT_CURRENCI = "convert_from.json/";
 
     @Override
-    public Object createWidget(String body) {
-        Currencie currencie = new Currencie();
-        JSONObject input = new JSONObject(body);
+    public <W extends WidgetRequest> Object createWidget(W request) throws Exception {
+        Currency currency = new Currency();
 
-        String currencie1 = input.getString("currencie1");
-        String currencie2 = input.getString("currencie2");
-        if (!currencie1.isBlank())
-            currencie.setCurrencie1(currencie1);
-        if (!currencie2.isBlank())
-            currencie.setCurrencie2(currencie2);
-
-        widgetRepository.save(currencie);
-
-        return currencie;
+        return this.save(currency, (CurrencyRequest) request);
     }
 
     @Override
-    public Object updateWidget(int id, String body) throws Exception {
-        Currencie currency = super.getInstanceOf(Currencie.class, id);
+    public <W extends WidgetRequest> Object updateWidget(long id, W request) throws Exception {
+        Currency currency = super.getInstanceOf(Currency.class, id);
 
-        JSONObject input = new JSONObject(body);
-
-        String currency1 = input.getString("currency1");
-        String currency2 = input.getString("currency2");
-        if (!currency1.isBlank())
-            currency.setCurrencie1(currency1);
-
-        if (!currency2.isBlank())
-            currency.setCurrencie2(currency2);
-
-        widgetRepository.save(currency);
-
-        return currency;
+        return this.save(currency, (CurrencyRequest) request);
     }
 
     @Override
-    public String updateData(int id) throws Exception {
-        Currencie currencie = super.getInstanceOf(Currencie.class, id);
+    public String updateData(long id) throws Exception {
+        Currency currency = super.getInstanceOf(Currency.class, id);
 
-        if (currencie.getCurrencie1() == null || currencie.getCurrencie2() == null)
-            throw new Exception("Not currencie");
+        if (currency.getFromCurrency() == null || currency.getToCurrencies() == null)
+            throw new Exception("Not currency");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
                         API_URL + API_URL_CONVERT_CURRENCI + "?from="
-                                + currencie.getCurrencie1()
-                                + "&to=" + currencie.getCurrencie2()))
+                                + currency.getFromCurrency()
+                                + "&to=" + currency.getToCurrencies()))
                 .build();
 
         HttpClient httpClient = this.getClient();
@@ -84,7 +64,7 @@ public class CurrencieService extends WidgetService {
         return response.body();
     }
 
-    public String getAllCurrencie() throws Exception {
+    public String getAllCurrencies() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(
                         API_URL + API_URL_ALL_CURRENCIES))
@@ -95,6 +75,21 @@ public class CurrencieService extends WidgetService {
         HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
 
         return response.body();
+    }
+
+    @Override
+    protected <W extends Widget, R extends WidgetRequest> Object save(W currencyT, R requestT) throws Exception {
+        Currency currency = (Currency) currencyT;
+        CurrencyRequest request = (CurrencyRequest) requestT;
+
+        currency.setFromCurrency(request.getFrom());
+
+        if (request.getTo() == null || request.getTo().isBlank())
+            currency.setToCurrencies(request.getFrom());
+        else
+            currency.setToCurrencies(request.getTo().replaceAll(" ", ""));
+
+        return super.save(currency, request);
     }
 
     private HttpClient getClient() {

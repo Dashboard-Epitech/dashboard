@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dashboard.api.Auth.UserDataRequest;
+import com.dashboard.api.Request.UserDataRequest;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.SpotifyTokenExpiredException;
 import com.dashboard.api.Exception.UserNotFoundException;

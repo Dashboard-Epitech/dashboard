@@ -9,9 +9,9 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@DiscriminatorValue("Currencie")
-public class Currencie extends Widget {
+@DiscriminatorValue("Currency")
+public class Currency extends Widget {
 
-    private String currencie1;
-    private String currencie2;
+    private String fromCurrency;
+    private String toCurrencies;
 }

@@ -13,4 +13,6 @@ import lombok.Setter;
 public class Weather extends Widget {
 
     private String city;
+
+    private Boolean isCelsius;
 }
