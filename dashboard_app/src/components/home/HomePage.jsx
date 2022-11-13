@@ -8,6 +8,8 @@ import { Sidebar } from "../nav/Sidebar"
 export const HomePage = () => {
     const [user, setUser] = useGlobalState("user");
 
+    console.log(user.token)
+
     if (!user) {
         return <Navigate to="/auth/login" />
     }

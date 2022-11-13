@@ -1,5 +1,6 @@
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Text } from "@chakra-ui/react"
 import { createContext, useState } from "react"
+import { NewSpotify } from "../spotify/NewSpotify";
 import { NewWeather } from "../weather/NewWeather";
 import { WidgetTypesGrid } from "./WidgetTypeGrid";
 
@@ -7,7 +8,6 @@ export const WidgetType = createContext();
 
 export const NewWidgetDrawer = ({ isOpen, onClose }) => {
     const [widgetType, setWidgetType] = useState(null);
-    console.log(widgetType)
     return (
         <Drawer onClose={onClose} isOpen={isOpen} size="xl">
             <DrawerOverlay />
@@ -20,6 +20,10 @@ export const NewWidgetDrawer = ({ isOpen, onClose }) => {
                         {
                             widgetType && widgetType == "weather" && 
                             <NewWeather />
+                        }
+                        {
+                            widgetType && widgetType == "spotify" && 
+                            <NewSpotify />
                         }
                     </DrawerBody>
                 </DrawerContent>

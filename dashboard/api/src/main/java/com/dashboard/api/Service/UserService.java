@@ -1,17 +1,24 @@
 package com.dashboard.api.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.Role;
+import com.dashboard.api.Entity.SpotifyToken;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.NoDataFoundException;
+import com.dashboard.api.Exception.SpotifyTokenExpiredException;
 import com.dashboard.api.Exception.UserNotFoundException;
+import com.dashboard.api.Model.Response.TokenResponse;
 import com.dashboard.api.Repository.RoleRepository;
+import com.dashboard.api.Repository.SpotifyTokenRepository;
 import com.dashboard.api.Repository.DashboardUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +30,7 @@ public class UserService {
     private final MailService mailService;
     private final DashboardUserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final SpotifyTokenRepository spotifyTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DashboardUser getUser(Long id) throws UserNotFoundException {

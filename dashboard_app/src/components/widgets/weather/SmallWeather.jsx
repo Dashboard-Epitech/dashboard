@@ -10,7 +10,7 @@ export const SmallWeather = ({city, temp, unit, weatherDesc, weatherIcon, weathe
 
     return (
         <>
-            <Flex w={"30%"} h="100px" backgroundImage={weatherBackground ?? null} backgroundPosition="center" backgroundSize="cover" backGroundColor={"gray.600"} my={6} p={2} borderRadius={"20px"} color="whatsapp" >
+            <Flex w={"30%"} h="100px" backgroundImage={weatherBackground ?? null} backgroundPosition="center" backgroundSize="cover" backGroundColor={"gray.600"} my={6} p={2} borderRadius={"20px"} color="white" >
                 <Grid templateColumns={"repeat(4, 1fr)"} w="100%">
                     <GridItem colSpan={3}>
                         <Flex w={"100%"} h="100%" p={3}>

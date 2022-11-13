@@ -57,7 +57,7 @@ export const WidgetTypesGrid = () => {
                         </Flex>
                     </Flex>
                 </GridItem>
-                <GridItem>
+                <GridItem onClick={(e) => setWidgetType("spotify")}>
                     <Flex h={"100%"} justifyContent={"space-between"} alignItems={"center"} flexDir="column" p={4} backgroundColor="gray.600" borderRadius={"20px"}>
                         <Flex>
                             <FaSpotify size={"4rem"} />

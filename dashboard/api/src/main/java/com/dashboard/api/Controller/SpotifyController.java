@@ -4,28 +4,43 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.dashboard.api.Entity.DashboardUser;
+import com.dashboard.api.Entity.SpotifyToken;
 import com.dashboard.api.Service.SpotifyService;
+import com.dashboard.api.Service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Playlist;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
+import se.michaelthelin.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
+import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistsItemsRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/spotify")
+@CrossOrigin(originPatterns = "http://localhost:*")
 public class SpotifyController {
 
     private final SpotifyService spotifyService;
+    private final UserService userService;
 
-    @GetMapping("/login")
-    @CrossOrigin(originPatterns = "*")
+    @GetMapping("login")
     public ResponseEntity<?> spotifyLogin() {
         try {
             return ResponseEntity.ok().body(spotifyService.getAuthCode());
@@ -34,27 +49,75 @@ public class SpotifyController {
         }
     }
 
-    @GetMapping("/token")
-    @CrossOrigin(originPatterns = "*")
-    public ResponseEntity<?> spotifyToken(@RequestParam("code") String userCode, HttpServletResponse response) throws IOException {
-        SpotifyApi spotifyApi = spotifyService.geSpotifyApi();
-        AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(userCode).build();
-
+    @GetMapping("token")
+    public ResponseEntity<?> spotifyToken(@AuthenticationPrincipal DashboardUser user,
+            @RequestParam("code") String userCode, HttpServletResponse response) throws IOException {
         try {
+            SpotifyApi spotifyApi = spotifyService.getSpotifyApi();
+            AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(userCode).build();
             AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+
 
             spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
             spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
-            response.sendRedirect("http://localhost:3000/dashboard/widgets/spotify/?token=" + spotifyApi.getAccessToken());
+            spotifyService.setSpotifyToken(user.getId(), spotifyApi.getAccessToken(), spotifyApi.getRefreshToken());
+
             return ResponseEntity.ok().body(spotifyApi.getAccessToken());
         } catch (Exception ex) {
             return ResponseEntity.internalServerError().body(ex.getMessage());
         }
     }
 
-    // @GetMapping("playlists")
-    // public ResponseEntity<?> getUserPlaylists() {
-        
+    @GetMapping("usertoken") 
+    public ResponseEntity<?> userToken(@AuthenticationPrincipal DashboardUser user) {
+        try {
+            return ResponseEntity.ok().body(spotifyService.getSpotifyToken(user.getId()));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getClass() + " : " + ex.getMessage());
+        }
+    }
+
+    @GetMapping("refresh")
+    public ResponseEntity<?> refreshSpotifyToken(@AuthenticationPrincipal DashboardUser user) {
+        try {
+            return ResponseEntity.ok().body(spotifyService.refreshSpotifyToken(user.getId()));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getClass() + " : " + ex.getMessage());
+        }
+    }
+
+    @GetMapping("playlists")
+    public ResponseEntity<?> getUserPlaylists(@AuthenticationPrincipal DashboardUser user) {
+        try {
+            return ResponseEntity.ok().body(spotifyService.getPlaylists(user.getId()));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("playlists/tracks/{playlistId}")
+    public ResponseEntity<?> getTracks(@AuthenticationPrincipal DashboardUser user, @PathVariable("playlistId") String playlistId) {
+        try {
+            return ResponseEntity.ok().body(spotifyService.getTracks(user.getId(), playlistId));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+
+    // @GetMapping("playlist/tracks/{id}") 
+    // public ResponseEntity<?> getUserPlaylistTracks(@AuthenticationPrincipal DashboardUser user, @PathVariable("id") String playListId) {
+    //     try {
+    //         String spotifyAccessToken = userService.getUserSpotifyToken(user.getId());
+    //         SpotifyApi spotifyApi = spotifyService.geSpotifyApi();
+    //         spotifyApi.setAccessToken(spotifyAccessToken);
+
+    //         final GetPlaylistsItemsRequest getPlaylistsItemsRequest = spotifyApi.getPlaylistsItems(playListId).build();
+    //         final Paging<PlaylistTrack> playlistTracksPagin = getPlaylistsItemsRequest.execute();
+
+    //         return ResponseEntity.ok().body(playlistTracksPagin.getItems());
+    //     } catch (Exception ex) {
+    //         return ResponseEntity.internalServerError().body(ex.getMessage());
+    //     }
     // }
 }
