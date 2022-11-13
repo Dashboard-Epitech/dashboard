@@ -105,6 +105,15 @@ public class SpotifyController {
         }
     }
 
+    @GetMapping("track/eminem")
+    public ResponseEntity<?> getArtistTrack(@AuthenticationPrincipal DashboardUser user) {
+        try {
+            return ResponseEntity.ok().body(spotifyService.getEminemTrack(user.getId()));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+
     // @GetMapping("playlist/tracks/{id}") 
     // public ResponseEntity<?> getUserPlaylistTracks(@AuthenticationPrincipal DashboardUser user, @PathVariable("id") String playListId) {
     //     try {

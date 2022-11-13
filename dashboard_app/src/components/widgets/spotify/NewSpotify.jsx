@@ -17,7 +17,7 @@ export const NewSpotify = () => {
     const [isTokenExpired, setIsTokenExpired] = useState(false)
     const [error, setError] = useState(null);
     const [playlists, setPlaylists] = useState([]);
-    const [tracks, setTracks] = useState([]);
+    const [randomTrack, setRandomTrack] = useState();
     const [widgetType, setWidgetType] = useState();
     const [playlist, setPlaylist] = useState();
 
@@ -57,13 +57,13 @@ export const NewSpotify = () => {
             })
     }
 
-    const getPlaylistTracks = (playListId) => {
-        ajax.getPlaylistTracks(user.token, playListId)
+    const getRandomEminemTrack = () => {
+        ajax.getRandomEminemTrack(user.token)
             .then((response) => {
-                setTracks(response.data.items)
+                setRandomTrack(response.data.id)
             })
-            .catch((errors) => {
-                console.log(errors)
+            .catch((error) => {
+                console.log(error);
             })
     }
 
@@ -77,22 +77,18 @@ export const NewSpotify = () => {
     }
 
     const renderWidget = () => {
-        if (tracks.length == 0) {
-            getPlaylistTracks(playlist);
-        }
-        if (widgetType == "track" && tracks.length > 0) {
-            const randomTrack = tracks[Math.floor(Math.random() * tracks.length + 1)];
+        if (widgetType == "track") {
             if (size == "XL") {
                 return (
-                    <LargeSpotifyTrack track={randomTrack ? randomTrack.track.id : null} />
+                    <LargeSpotifyTrack track={randomTrack} />
                 )
             } else if (size == "MD") {
                 return (
-                    <MediumSpotifyTrack track={randomTrack ? randomTrack.track.id : null} />
+                    <MediumSpotifyTrack track={randomTrack} />
                 )
             } else {
                 return (
-                    <SmallSpotifyTrack track={randomTrack ? randomTrack.track.id : null} />
+                    <SmallSpotifyTrack track={randomTrack} />
                 )
             }
         } else if (widgetType == "playlist") {
@@ -139,8 +135,8 @@ export const NewSpotify = () => {
                 }
             </Flex>
             <Flex w={"40%"} justifyContent={"space-between"} mb={6}>
-                <Button onClick={() => { setWidgetType("track") }}>Random Track</Button>
-                <Button onClick={() => { setWidgetType("playlist") }}>Full Playlist</Button>
+                <Button onClick={() => { setWidgetType("track"); getRandomEminemTrack() }}>Random Track</Button>
+                <Button onClick={() => { setWidgetType("playlist"); }}>Full Playlist</Button>
             </Flex>
             <Flex w="40%" justifyContent="space-between" mb={6}>
                 <Button onClick={() => { setSize("SM") }}>

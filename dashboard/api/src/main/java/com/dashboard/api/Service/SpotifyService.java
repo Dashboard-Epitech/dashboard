@@ -3,8 +3,7 @@ package com.dashboard.api.Service;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
-import javax.sound.midi.Track;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,16 +15,19 @@ import com.dashboard.api.Exception.UserNotFoundException;
 import com.dashboard.api.Model.Response.TokenResponse;
 import com.dashboard.api.Repository.DashboardUserRepository;
 import com.dashboard.api.Repository.SpotifyTokenRepository;
+import com.neovisionaries.i18n.CountryCode;
 
 import antlr.Token;
 import lombok.NoArgsConstructor;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.SpotifyHttpManager;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Playlist;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -169,5 +171,22 @@ public class SpotifyService {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+
+    public Track getEminemTrack(Long userId) throws UserNotFoundException, Exception {
+        Optional<DashboardUser> user = userRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new UserNotFoundException();
+        }
+
+        SpotifyApi spotifyApi = getSpotifyApi();
+        spotifyApi.setAccessToken(user.get().getSpotifyToken().getToken());
+
+        Track[] eminemTrack = spotifyApi.getArtistsTopTracks("7dGJo4pcD2V6oG8kP0tJRR", CountryCode.FR).build().execute();
+
+        Random r = new Random();
+        Track randomTrack = eminemTrack[r.nextInt(eminemTrack.length + 1)];
+
+        return randomTrack;
     }
 }
