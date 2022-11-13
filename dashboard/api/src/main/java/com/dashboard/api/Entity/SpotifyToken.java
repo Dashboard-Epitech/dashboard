@@ -1,35 +1,41 @@
 package com.dashboard.api.Entity;
 
-import java.util.Collection;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Getter
 @Setter
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+public class SpotifyToken {
+
+    @Column
     @Id
-    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
-    private Collection<DashboardUser> users;
+    private String token;
 
-    private String name;
+    private String refresh;
+
+    private LocalDateTime expires;
+    
+    @OneToOne(mappedBy = "spotifyToken")
+    private DashboardUser dashboardUser;
 }

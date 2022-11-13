@@ -1,22 +1,23 @@
 import { Button, ButtonGroup, VisuallyHidden } from '@chakra-ui/react'
 import { FaGithub, FaGoogle, FaMicrosoft, FaTwitter } from 'react-icons/fa';
-
-const providers = [
-    { name: 'Google', icon: <FaGoogle /> },
-    { name: 'Microsoft', icon: <FaMicrosoft /> },
-    { name: 'GitHub', icon: <FaGithub /> },
-]
+import { GitHubOauth2 } from './oauth2/GithubOAuth2';
 
 export const OAuthButtonGroup = () => {
     return (
-        <ButtonGroup variant="outline" spacing="4" width="full">
-            {providers.map(({ name, icon }) => (
-                <Button key={name} width="full">
-                    <VisuallyHidden>Sign in with {name}</VisuallyHidden>
-                    {icon}
+        <>
+            <ButtonGroup variant="outline" spacing="4" width="full">
+                <Button key="google" width="full">
+                    <VisuallyHidden>Sign in with Google</VisuallyHidden>
+                    <FaGoogle />
                 </Button>
-            ))}
-        </ButtonGroup>
+                <Button key="microsoft" width="full">
+                    <VisuallyHidden>Sign in with Microsoft</VisuallyHidden>
+                    <FaMicrosoft />
+                </Button>
+                <GitHubOauth2 />
+            </ButtonGroup>
+        </>
+
     )
 }
 

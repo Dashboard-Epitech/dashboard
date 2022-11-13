@@ -15,20 +15,15 @@ import {
 import { Navigate } from 'react-router';
 import { useGlobalState } from '../../state';
 
-const LogoutModal = () => {
+const LogoutModal = ({isOpen, onClose}) => {
     const [user, setUser] = useGlobalState('user');
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
-
-    if (!user) {
-        return <Navigate to='auth/login' />
-    }
 
     const handleLogout = (e) => {
         e.preventDefault();
         localStorage.clear();
-        setUser(null)
+        setUser(null);
         onClose();
-        return <Navigate to="../../auth/login" />
+        return <Navigate to="/auth/login" />
     }
 
     return (
@@ -38,7 +33,6 @@ const LogoutModal = () => {
                     <ModalHeader>
                         <Heading>Logout</Heading>
                     </ModalHeader>
-                    <ModalCloseButton />
                     <ModalBody p={4}>
                         <Text>Do you wish to logout ?</Text>
                     </ModalBody>
@@ -46,6 +40,9 @@ const LogoutModal = () => {
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={(e) => {handleLogout(e)}}>
                             Logout
+                        </Button>
+                        <Button colorScheme='blue' mr={3} onClick={onClose}>
+                            Cancel
                         </Button>
                     </ModalFooter>
                 </ModalContent>
