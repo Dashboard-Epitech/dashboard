@@ -42,6 +42,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />}>
             <Route path='login' element={<LoginForm />}>
               <Route path='verified' element={<AlertSuccess alertContent="Account Verified. Please log in !" />} />
+              <Route path='github' />
             </Route>
             <Route path='register' element={<RegisterForm />} />
           </Route>

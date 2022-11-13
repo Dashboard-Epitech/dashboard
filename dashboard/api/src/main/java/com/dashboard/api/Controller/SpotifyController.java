@@ -52,7 +52,6 @@ public class SpotifyController {
     @GetMapping("token")
     public ResponseEntity<?> spotifyToken(@AuthenticationPrincipal DashboardUser user,
             @RequestParam("code") String userCode, HttpServletResponse response) throws IOException {
-            throws IOException {
         try {
             SpotifyApi spotifyApi = spotifyService.getSpotifyApi();
             AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(userCode).build();

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.JWT.JwtTokenFilter;
 import com.dashboard.api.Repository.DashboardUserRepository;
+
 
 @Configuration
 public class ApiSecurity {
@@ -28,12 +28,13 @@ public class ApiSecurity {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
+                .antMatchers("/", "/login/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.oauth2Login();
 
         return http.build();
     }

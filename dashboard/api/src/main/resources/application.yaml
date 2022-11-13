@@ -1,0 +1,9 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_API_CLIENT_ID}
+            clientSecret: ${GITHUB_API_CLIENT_SECRET}
+            redirectUri: ${GITHUB_API_CLIENT_REDIRECT}

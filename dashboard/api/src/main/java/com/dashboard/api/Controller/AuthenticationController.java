@@ -31,6 +31,7 @@ import com.dashboard.api.Error.MailResponseError;
 import com.dashboard.api.Error.UserNotVerifiedError;
 import com.dashboard.api.Error.UsernameAlreadyExistsResponseError;
 import com.dashboard.api.JWT.JwtTokenUtil;
+import com.dashboard.api.Service.GithubService;
 import com.dashboard.api.Service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(originPatterns = "http://localhost:*")
 public class AuthenticationController {
 	private final UserService userService;
+	private final GithubService githubService;
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenUtil jwtTokenUtil;
 
@@ -77,6 +79,15 @@ public class AuthenticationController {
 		return ResponseEntity.ok().body(response);
 
 	}
+
+	@GetMapping("github/login")
+    public String githubLogin() {
+        try {
+            return githubService.getLoginPage();
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)

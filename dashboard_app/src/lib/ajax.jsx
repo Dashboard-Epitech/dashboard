@@ -35,7 +35,7 @@ export const getWeather = (city) => {
 //GITHUB
 
 export const authGithub = () => {
-    return axios.get(BASE_URL + 'github/login');
+    return axios.get(BASE_URL + 'auth/github/login');
 }
 
 //SPOTIFY 
