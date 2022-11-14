@@ -30,9 +30,9 @@ public class ApiSecurity {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .anyRequest().authenticated();
+                // .antMatchers("/auth/**").permitAll()
+                // .antMatchers("/admin").hasRole("ADMIN")
+                .anyRequest().permitAll();// .authenticated();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

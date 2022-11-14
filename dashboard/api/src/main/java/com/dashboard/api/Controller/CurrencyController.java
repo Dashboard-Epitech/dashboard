@@ -40,6 +40,7 @@ public class CurrencyController extends WidgetContoller {
         try {
             return ResponseEntity.ok().body(this.currencyService.getAllCurrencies());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

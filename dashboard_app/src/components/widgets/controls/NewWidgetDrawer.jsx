@@ -1,5 +1,6 @@
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Text } from "@chakra-ui/react"
 import { createContext, useState } from "react"
+import { NewCurrency } from "../currency/NewCurrency";
 import { NewSpotify } from "../spotify/NewSpotify";
 import { NewWeather } from "../weather/NewWeather";
 import { WidgetTypesGrid } from "./WidgetTypeGrid";
@@ -24,6 +25,10 @@ export const NewWidgetDrawer = ({ isOpen, onClose }) => {
                         {
                             widgetType && widgetType == "spotify" && 
                             <NewSpotify />
+                        }
+                        {
+                            widgetType && widgetType == "currency" && 
+                            <NewCurrency />
                         }
                     </DrawerBody>
                 </DrawerContent>
