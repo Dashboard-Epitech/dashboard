@@ -39,7 +39,7 @@ public class UserController {
 	@PostMapping("/get")
 	public ResponseEntity<?> getUser(@RequestBody UserDataRequest request) {
 		try {
-			return ResponseEntity.ok().body(userService.getUserByEmail(request.getEmail()).toSafeData());
+			return ResponseEntity.ok().body(userService.getUserByEmail(request.getEmail()));
 		} catch (UserNotFoundException userNotFoundException) {
 			return ResponseEntity.internalServerError().body(request);
 		} catch (Exception stdException) {

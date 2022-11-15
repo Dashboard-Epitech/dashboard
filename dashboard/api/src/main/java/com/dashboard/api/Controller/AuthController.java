@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,13 +25,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.dashboard.api.Request.AuthRequest;
 import com.dashboard.api.Request.AuthResponse;
+import com.dashboard.api.Security.token.JWTProvider;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Error.BadCredentialsResponseError;
 import com.dashboard.api.Error.BadUserFormResponseError;
 import com.dashboard.api.Error.MailResponseError;
 import com.dashboard.api.Error.UserNotVerifiedError;
 import com.dashboard.api.Error.UsernameAlreadyExistsResponseError;
-import com.dashboard.api.JWT.JwtTokenUtil;
+import com.dashboard.api.Model.Request.LocalAuthLoginRequest;
+import com.dashboard.api.Model.Request.LocalAuthRegisterRequest;
+import com.dashboard.api.Model.Response.LocalAuthLoginResponse;
 import com.dashboard.api.Service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -38,15 +42,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping(path = "/auth")
 @CrossOrigin(originPatterns = "http://localhost:*")
-public class AuthenticationController {
+public class AuthController {
 	private final UserService userService;
 	private final AuthenticationManager authenticationManager;
-	private final JwtTokenUtil jwtTokenUtil;
+	private final JWTProvider tokenProvider;
+
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody @Valid LocalAuthLoginRequest request) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						request.getUsername(), request.getPassword()
+					)
+				);
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String token = tokenProvider.createToken(authentication);
+
+		return ResponseEntity.ok().body(new LocalAuthLoginResponse(request.getUsername(), token));
+	}
 
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody @Valid DashboardUser user) {
+	public ResponseEntity<?> registerUser(@RequestBody @Valid LocalAuthRegisterRequest request) {
 		try {
-			return ResponseEntity.created(null).body(userService.registerUser(user));
+			return ResponseEntity.created(null).body(userService.registerUser(request));
 		} catch (Exception ex) {
 			return ResponseEntity.badRequest().body(new UsernameAlreadyExistsResponseError().build());
 		}
@@ -62,20 +80,6 @@ public class AuthenticationController {
 		} catch (Exception ex) {
 			return ResponseEntity.internalServerError().body(ex.getMessage());
 		}
-	}
-
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						request.getUsername(), request.getPassword()));
-
-		DashboardUser user = (DashboardUser) authentication.getPrincipal();
-		String accessToken = jwtTokenUtil.generateAccessToken(user);
-		AuthResponse response = new AuthResponse(user.getEmail(), accessToken);
-
-		return ResponseEntity.ok().body(response);
-
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

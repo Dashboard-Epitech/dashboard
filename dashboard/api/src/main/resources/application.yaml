@@ -1,0 +1,22 @@
+spring: 
+    security:
+      oauth2:
+        client:
+          registration:
+            github:
+              clientId: ${GITHUB_CLIENT_ID}
+              clientSecret: ${GITHUB_CLIENT_SECRET}
+              redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+              scope:
+                - user:email
+                - read:user
+
+app: 
+  auth: 
+    tokenSecret: ${JWT_SECRET}
+    tokenExpirationMsec: 864000000
+  cors:
+    allowedOrigins: http://localhost:3000
+  oauth2:
+      authorizedRedirectUris:
+        - http://localhost:3000/oauth2/redirect
