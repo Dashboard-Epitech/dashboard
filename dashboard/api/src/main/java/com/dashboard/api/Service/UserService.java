@@ -10,15 +10,17 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.dashboard.api.Entity.Role;
-import com.dashboard.api.Entity.SpotifyToken;
+// import com.dashboard.api.Entity.SpotifyToken;
 import com.dashboard.api.Entity.DashboardUser;
+import com.dashboard.api.Exception.EmailAlreadyInUseException;
 import com.dashboard.api.Exception.NoDataFoundException;
 import com.dashboard.api.Exception.SpotifyTokenExpiredException;
 import com.dashboard.api.Exception.UserNotFoundException;
+import com.dashboard.api.Exception.UsernameAlreadyInUseException;
+import com.dashboard.api.Model.Enum.AuthProviderEnum;
+import com.dashboard.api.Model.Request.LocalAuthRegisterRequest;
 import com.dashboard.api.Model.Response.TokenResponse;
-import com.dashboard.api.Repository.RoleRepository;
-import com.dashboard.api.Repository.SpotifyTokenRepository;
+// import com.dashboard.api.Repository.SpotifyTokenRepository;
 import com.dashboard.api.Repository.DashboardUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,8 +31,7 @@ import net.bytebuddy.utility.RandomString;
 public class UserService {
     private final MailService mailService;
     private final DashboardUserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final SpotifyTokenRepository spotifyTokenRepository;
+    // private final SpotifyTokenRepository spotifyTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DashboardUser getUser(Long id) throws UserNotFoundException {
@@ -84,21 +85,32 @@ public class UserService {
         return userRepository.save(user.get());
     }
 
-    public DashboardUser registerUser(DashboardUser user) throws Exception {
+    public DashboardUser registerUser(LocalAuthRegisterRequest request) throws Exception {
         try {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoles(Arrays.asList(roleRepository.findByName("USER")));
+            if (userRepository.existsByEmail(request.getEmail())) {
+                throw new EmailAlreadyInUseException();
+            }
 
+            if (userRepository.existsByUsername(request.getUsername())) {
+                throw new UsernameAlreadyInUseException();
+            }
+
+            DashboardUser user = new DashboardUser();
             String verificationCode = RandomString.make(64);
-            user.setVerificationCode(verificationCode);
 
-            userRepository.save(user);
+            user.setUsername(request.getUsername())
+                .setEmail(request.getEmail())
+                .setPassword(passwordEncoder.encode(request.getPassword()))
+                .setProvider(AuthProviderEnum.local)
+                .setVerificationCode(verificationCode)
+            ;
 
+            user = userRepository.save(user);
             mailService.sendVerificationMail(user, verificationCode);
 
             return user;
-        } catch (Exception validationEx) {
-            throw validationEx;
+        } catch (Exception ex) {
+            throw ex;
         }
     }
 
@@ -118,16 +130,5 @@ public class UserService {
         } catch (Exception ex) {
             throw ex;
         }
-    }
-
-    public Role saveRole(Role role) {
-        return this.roleRepository.save(role);
-    }
-
-    public void setUserRole(String email, String roleName) {
-        DashboardUser user = userRepository.findByEmail(email).get();
-        Role role = roleRepository.findByName(roleName);
-
-        user.getRoles().add(role);
     }
 }

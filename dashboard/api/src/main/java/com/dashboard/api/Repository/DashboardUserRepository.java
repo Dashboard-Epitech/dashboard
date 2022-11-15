@@ -11,4 +11,6 @@ public interface DashboardUserRepository extends CrudRepository<DashboardUser, L
     public List<DashboardUser> findAll();
     public Optional<DashboardUser> findByEmail(String email);
     public Optional<DashboardUser> findByUsername(String username);
+    public Boolean existsByEmail(String email);
+    public Boolean existsByUsername(String username);
 }

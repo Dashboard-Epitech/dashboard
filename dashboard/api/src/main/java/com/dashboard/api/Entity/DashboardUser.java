@@ -1,5 +1,6 @@
 package com.dashboard.api.Entity;
 
+import java.security.AuthProvider;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +10,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.dashboard.api.Model.Enum.AuthProviderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -42,7 +46,7 @@ import lombok.experimental.Accessors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DashboardUser implements UserDetails {
+public class DashboardUser {
 
   @Column(name = "user_id")
   @Id
@@ -50,31 +54,30 @@ public class DashboardUser implements UserDetails {
   private Long id;
 
   @Column(unique = true)
-  @NotBlank(message = "No username found")
-  @NotNull(message = "No username found")
-  private String username;
-
-  @Column
-  @NotBlank(message = "No password found")
-  @NotNull(message = "No password found")
-  private String password;
-
-  @Column(unique = true)
   @NotBlank(message = "No email found")
   @NotNull(message = "No email found")
   @Email(message = "Invalid email address")
   private String email;
 
-  @ManyToMany
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private Collection<Role> roles;
+  @Column(unique = true)
+  @NotBlank(message = "No username found")
+  @NotNull(message = "No username found")
+  private String username;
 
   @Column
-  private boolean verified = false;
+  @JsonIgnore
+  private String password;
+
+  @Column(nullable = false)
+  private boolean isVerified = false;
 
   @Column
   @Nullable
   private String verificationCode;
+
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private AuthProviderEnum provider;
 
   @Column
   @CreationTimestamp
@@ -84,47 +87,46 @@ public class DashboardUser implements UserDetails {
   @UpdateTimestamp
   private LocalDate dateUpdated;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-  @JsonIgnore
-  private List<DashBoard> dashBoards = new ArrayList<>();
+  // @ManyToMany
+  // @OnDelete(action = OnDeleteAction.CASCADE)
+  // private Collection<Role> roles;
 
-  @OneToOne
-  @JoinColumn(name = "spotify_token_id")
-  private SpotifyToken spotifyToken;
+  // @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+  // @JsonIgnore
+  // private List<DashBoard> dashBoards = new ArrayList<>();
 
-  @Override
-  public boolean isEnabled() {
-    return this.verified;
-  }
+  // @OneToOne
+  // @JoinColumn(name = "spotify_token_id")
+  // private SpotifyToken spotifyToken;
 
-  public DashboardUser toSafeData() {
-    DashboardUser safeData = new DashboardUser();
-    safeData.setUsername(username)
-            .setId(id)
-            .setEmail(email)
-            .setRoles(roles)
-            .setVerified(verified);
+  // public DashboardUser toSafeData() {
+  //   DashboardUser safeData = new DashboardUser();
+  //   safeData.setUsername(username)
+  //           .setId(id)
+  //           .setEmail(email)
+  //           .setRoles(roles)
+  //           .setVerified(verified);
 
-    return safeData;
-  }
+  //   return safeData;
+  // }
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
+  // @Override
+  // public boolean isAccountNonExpired() {
+  //   return true;
+  // }
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
+  // @Override
+  // public boolean isAccountNonLocked() {
+  //   return true;
+  // }
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
+  // @Override
+  // public boolean isCredentialsNonExpired() {
+  //   return true;
+  // }
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.EMPTY_LIST;
-  }
+  // @Override
+  // public Collection<? extends GrantedAuthority> getAuthorities() {
+  //   return Collections.EMPTY_LIST;
+  // }
 }
