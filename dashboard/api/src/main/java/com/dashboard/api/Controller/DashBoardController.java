@@ -1,6 +1,7 @@
 package com.dashboard.api.Controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -8,10 +9,14 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,21 +27,34 @@ import com.dashboard.api.Entity.DashBoard;
 import com.dashboard.api.Error.DashboardResponseError;
 import com.dashboard.api.Request.DashBoardRequest;
 import com.dashboard.api.Request.DashboardAddWidgetRequest;
+import com.dashboard.api.Security.oauth2.user.DashboardUserPrincipal;
 import com.dashboard.api.Service.DashBoardService;
 
 @RestController
 @RequestMapping("dashboard")
+@CrossOrigin(originPatterns = "http://localhost:*")
 public class DashBoardController {
     @Autowired
     DashBoardService dashboardService;
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public ResponseEntity<?> createDashBoard(@RequestBody @Valid DashBoardRequest request) {
+    @PostMapping(path = "/create")
+    public ResponseEntity<?> createDashBoard(@AuthenticationPrincipal DashboardUserPrincipal user, @RequestBody @Valid DashBoardRequest request) {
         try {
-            DashBoard dashBoard = (DashBoard) this.dashboardService.createDashBoard(request);
+            DashBoard dashBoard = this.dashboardService.createDashBoard(user.getId(), request.getName());
             return ResponseEntity.ok().body(dashBoard);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "/get/all")
+    public ResponseEntity<?> getDashboards(@AuthenticationPrincipal DashboardUserPrincipal user) {
+        try {
+            List<DashBoard> dashboards = dashboardService.getUserDashboards(user.getId());
+
+            return ResponseEntity.ok().body(dashboards);
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getMessage());
         }
     }
 

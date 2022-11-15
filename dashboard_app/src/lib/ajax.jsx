@@ -24,6 +24,26 @@ export const getUserData = (token) => {
     }); 
 }
 
+//DASHBOARD
+
+export const getUserDashboards = (token) => {
+    return axios.get(BASE_URL + 'dashboard/get/all', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }); 
+}
+
+export const newDashboard = (token, name) => {
+    return axios.post(BASE_URL + 'dashboard/create', {
+        name: name
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
 // Weather
 
 export const getWeather = (city, isCelsius, dashboard_id) => {

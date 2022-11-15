@@ -1,16 +1,19 @@
 package com.dashboard.api.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.DashBoard;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Error.DashboardResponseError;
+import com.dashboard.api.Exception.UserNotFoundException;
 import com.dashboard.api.Repository.DashBoardRepository;
 import com.dashboard.api.Repository.DashboardUserRepository;
 import com.dashboard.api.Repository.WidgetRepository;
@@ -29,18 +32,23 @@ public class DashBoardService {
     @Autowired
     WidgetRepository widgetRepository;
 
-    public Object createDashBoard(DashBoardRequest request) throws Exception {
-        DashBoard dashBoard = new DashBoard();
+    public DashBoard createDashBoard(Long userId, String dashboardName) throws Exception {
+        try {
+            Optional<DashboardUser> optional = dashboardUserRepository.findById(userId);
+            if (!optional.isPresent()) {
+                throw new UserNotFoundException();
+            }
 
-        Optional<DashboardUser> user = this.dashboardUserRepository.findById(request.getUser_id());
-        if (!user.isPresent())
-            throw new Exception("user " + request.getUser_id() + " not found");
-        dashBoard.setUser(user.get());
-        dashBoard.setName(request.getName());
+            DashboardUser user = optional.get();
 
-        this.dashBoardRepository.save(dashBoard);
+            DashBoard dashboard = new DashBoard();
+            dashboard.setName(dashboardName);
+            dashboard.setUser(user);
 
-        return dashBoard;
+            return dashBoardRepository.save(dashboard);
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 
     public Object addWidget(DashboardAddWidgetRequest request) throws Exception {
@@ -87,6 +95,19 @@ public class DashBoardService {
         this.dashBoardRepository.save(dashBoard);
 
         return dashBoard;
+    }
+
+    public List<DashBoard> getUserDashboards(Long userId) throws Exception {
+        Optional<DashboardUser> optional = dashboardUserRepository.findById(userId);
+        if (!optional.isPresent()) {
+            throw new UserNotFoundException();
+        }
+
+        DashboardUser user = optional.get();
+
+        List<DashBoard> userDashboards = user.getDashBoards();
+
+        return userDashboards;
     }
 
     public Object remove(long id) throws Exception {

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useGlobalState } from './state';
 import { AuthPage } from './components/auth/AuthPage';
-import { Dashboard } from './components/dashboard/Dashboard';
 import { LoginForm } from './components/auth/login/LoginForm';
 import { RegisterForm } from './components/auth/register/RegisterForm';
 import { AlertSuccess } from './components/alerts/AlertSuccess';
@@ -14,6 +13,10 @@ import { NewWidget } from './components/widgets/NewWidget';
 import { NewWeather } from './components/widgets/weather/NewWeather';
 import { OAuth2RedirectGithub } from './components/auth/oauth2/OAuth2RedirectGithub';
 import { OAuth2RedirectSpotify } from './components/auth/oauth2/OAuth2RedirectSpotify';
+import { Dashboards } from './components/dashboard/Dashboards';
+import { NewDashboard } from './components/dashboard/NewDashboard';
+import { DashboardsGrid } from './components/dashboard/DashboardsGrid';
+import { SingleDashboard } from './components/dashboard/SingleDashboard';
 
 function App() {
   useEffect(() => {
@@ -29,7 +32,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />}>
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="dashboard" element={<Dashboards />}>
+              <Route path=":id" element={<SingleDashboard />} />
+            </Route>
             <Route path="widgets" element={<WidgetMenu />}>
               <Route path="controls" element={<WidgetControls />}>
                 <Route path="new" element={<NewWidget />}>
@@ -46,8 +51,8 @@ function App() {
           </Route>
           <Route path="/oauth2">
             <Route path="redirect">
-              <Route path="github" element={<OAuth2RedirectGithub />}/>
-              <Route path="spotify" element={<OAuth2RedirectSpotify />}/>
+              <Route path="github" element={<OAuth2RedirectGithub />} />
+              <Route path="spotify" element={<OAuth2RedirectSpotify />} />
             </Route>
           </Route>
         </Routes>

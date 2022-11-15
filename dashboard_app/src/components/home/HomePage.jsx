@@ -10,6 +10,8 @@ export const HomePage = () => {
     const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
     const [user, setUser] = useGlobalState("USER");
 
+    console.log(accessToken);
+
     if (!accessToken) {
         return <Navigate to="/auth/login" />
     } else if (!user) {

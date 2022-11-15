@@ -1,6 +1,6 @@
 import { Avatar, Button, Divider, Flex, Heading, IconButton, Spacer, Switch, Text, useColorMode, useColorModeValue, useDisclosure } from "@chakra-ui/react"
 import { useState } from "react";
-import { FaCaretLeft, FaChevronLeft, FaChevronRight, FaCog, FaHome, FaMoon, FaSun, FaUser, FaUserCircle } from "react-icons/fa"
+import { FaCaretLeft, FaChevronLeft, FaChevronRight, FaCog, FaDashcube, FaHome, FaMoon, FaSun, FaUser, FaUserCircle } from "react-icons/fa"
 import { MdSecurity, MdWidgets } from "react-icons/md";
 import { ImExit } from "react-icons/im";
 import { SidebarItem } from "./SidebarItem";
@@ -48,8 +48,7 @@ export const Sidebar = () => {
                             setNavSize("small")
                     }}
                 />
-                <SidebarItem navSize={navSize} icon={<FaHome size={"1.3rem"} />} title="Dashboard" target="/dashboard"/>
-                <SidebarItem navSize={navSize} icon={<MdWidgets size={"1.3rem"} />} title="Widgets" target="/widgets/controls" />
+                <SidebarItem navSize={navSize} icon={<MdWidgets size={"1.3rem"} />} title="Dashboards" target="/dashboard"/>
                 <SidebarItem navSize={navSize} icon={<MdSecurity size={"1.3rem"} />} title="Authorizations" target="/authorize"/>
                 <SidebarItem navSize={navSize} icon={<FaCog size={"1.3rem"} />} title="Settings" target="/settings"/>
                 <SidebarLogout navSize={navSize} icon={<ImExit size={"1.3rem"} />} title="Logout" onClick={onOpen}/>
