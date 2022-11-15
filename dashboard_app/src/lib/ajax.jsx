@@ -16,16 +16,12 @@ export const authRegister = (username, email, password) => {
     })
 }
 
-export const getUserData = (email, token) => {
-    const headers = {
-        'Authorization': 'Bearer ' + token,
-    }
-    
-    const body = {
-        email: email
-    }
-
-    return axios.post(BASE_URL + 'user/get', body, {headers}); 
+export const getUserData = (token) => {
+    return axios.get(BASE_URL + 'user/get', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }); 
 }
 
 // Weather

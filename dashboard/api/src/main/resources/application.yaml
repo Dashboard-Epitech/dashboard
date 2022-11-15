@@ -16,7 +16,7 @@ app:
     tokenSecret: ${JWT_SECRET}
     tokenExpirationMsec: 864000000
   cors:
-    allowedOrigins: http://localhost:3000
+    allowedOrigins: http://localhost:3000/**
   oauth2:
       authorizedRedirectUris:
         - http://localhost:3000/oauth2/redirect

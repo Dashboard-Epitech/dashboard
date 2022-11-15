@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.api.Request.UserDataRequest;
+import com.dashboard.api.Security.oauth2.user.DashboardUserPrincipal;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.SpotifyTokenExpiredException;
 import com.dashboard.api.Exception.UserNotFoundException;
@@ -36,14 +38,12 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final UserService userService;
 
-	@PostMapping("/get")
-	public ResponseEntity<?> getUser(@RequestBody UserDataRequest request) {
+	@GetMapping("/get")
+	public ResponseEntity<?> getUser(@AuthenticationPrincipal DashboardUserPrincipal user) {
 		try {
-			return ResponseEntity.ok().body(userService.getUserByEmail(request.getEmail()));
-		} catch (UserNotFoundException userNotFoundException) {
-			return ResponseEntity.internalServerError().body(request);
+			return ResponseEntity.ok().body(user);
 		} catch (Exception stdException) {
-			return ResponseEntity.internalServerError().body(request);
+			return ResponseEntity.internalServerError().body(stdException.getMessage());
 		}
 	}
 

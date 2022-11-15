@@ -16,7 +16,7 @@ import { Navigate } from 'react-router';
 import { useGlobalState } from '../../state';
 
 const LogoutModal = ({isOpen, onClose}) => {
-    const [user, setUser] = useGlobalState('user');
+    const [user, setUser] = useGlobalState('USER');
 
     const handleLogout = (e) => {
         e.preventDefault();

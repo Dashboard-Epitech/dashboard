@@ -9,7 +9,8 @@ import LogoutModal from "../modals/LogoutModal";
 import { SidebarLogout } from "./SidebarLogout";
 
 export const Sidebar = () => {
-    const [user, setUser] = useGlobalState('user')
+    const [accessToken, setAccessToken] = useGlobalState('ACCESS_TOKEN');
+    const [user, setUser] = useGlobalState("USER");
     const [navSize, setNavSize] = useState("large");
     const { toggleColorMode } = useColorMode();
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -78,8 +79,7 @@ export const Sidebar = () => {
                         ml={4}
                         display={navSize == "small" ? "none" : "flex"}
                     >
-                        <Heading >{user.username}</Heading>
-                        <Text>{user.role}</Text>
+                        <Heading >{user.userUsername}</Heading>
                     </Flex>
                 </Flex>
             </Flex>

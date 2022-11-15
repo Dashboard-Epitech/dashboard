@@ -13,10 +13,9 @@ import { WidgetMenu } from './components/widgets/WidgetMenu';
 import { WidgetControls } from './components/widgets/WidgetControls';
 import { NewWidget } from './components/widgets/NewWidget';
 import { NewWeather } from './components/widgets/weather/NewWeather';
+import { OAuth2Redirect } from './components/auth/oauth2/OAuth2Redirect';
 
 function App() {
-  const [user, setUser] = useGlobalState("user");
-
   useEffect(() => {
     WebFont.load({
       google: {
@@ -44,6 +43,9 @@ function App() {
               <Route path='verified' element={<AlertSuccess alertContent="Account Verified. Please log in !" />} />
             </Route>
             <Route path='register' element={<RegisterForm />} />
+          </Route>
+          <Route path="/oauth2">
+            <Route path="redirect" element={<OAuth2Redirect />} />
           </Route>
         </Routes>
       </BrowserRouter>
