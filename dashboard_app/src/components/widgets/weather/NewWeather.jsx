@@ -1,6 +1,5 @@
-import { Button, Divider, Flex, FormControl, FormLabel, Grid, GridItem, Heading, Input, Select, Text } from "@chakra-ui/react"
+import { Button, Flex, FormControl, FormLabel, Input, Text } from "@chakra-ui/react"
 import { useState } from "react";
-import { TiWeatherPartlySunny } from "react-icons/ti";
 import { LargeWeather } from "./LargeWeather";
 import * as ajax from "../../../lib/ajax";
 import { MediumWeather } from "./MediumWeather";
@@ -9,15 +8,13 @@ import { SmallWeather } from "./SmallWeather";
 export const NewWeather = () => {
     const [size, setSize] = useState("");
     const [error, setError] = useState("");
-    const [map, setMap] = useState({});
+   // const [map, setMap] = useState({});
     const [city, setCity] = useState("City");
     const [temp, setTemp] = useState("Temperature");
     const [unit, setUnit] = useState("Unit")
     const [weatherIcon, setWeatherIcon] = useState(null);
     const [weatherDesc, setWeatherDesc] = useState("Description");
     const [weatherBackground, setWeatherBackground] = useState(null);
-
-    console.log(size);
 
     const renderWidget = () => {
         if (error) {
@@ -37,7 +34,7 @@ export const NewWeather = () => {
     }
 
     const checkWeatherApi = () => {
-        ajax.getWeather(city)
+        ajax.getWeather("Paris", true, 1)
             .then((response) => {
                 setError(null)
                 let weather = response.data.weather[0];
@@ -46,7 +43,6 @@ export const NewWeather = () => {
                 setWeatherDesc(weather.main);
                 setWeatherIcon(`/weather/icon/${weather.icon}.png`);
                 setWeatherBackground(`/weather/back/${weather.icon}.jpg`)
-                console.log(temp, weatherDesc, weatherIcon)
             })
             .catch((error) => {
                 setError("City not found. Please enter a valid city")
@@ -54,7 +50,7 @@ export const NewWeather = () => {
     }
 
     const submitForm = () => {
-
+        
     }
 
     return (

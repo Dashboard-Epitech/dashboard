@@ -28,8 +28,53 @@ export const getUserData = (email, token) => {
     return axios.post(BASE_URL + 'user/get', body, {headers}); 
 }
 
-export const getWeather = (city) => {
-    return axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=248f71af2576da84a291a06fba0a8fdd`)
+// Weather
+
+export const getWeather = (city, isCelsius, dashboard_id) => {
+    const body = {
+        city: city,
+        isCelsius: isCelsius,
+        dashboard_id: dashboard_id
+    }
+    return axios.post(BASE_URL + 'widget/weather/search', body, {headers : "Access-Control-Allow-Origin: * "})
+}
+
+export const setWeatherWidget = (city, isCelsius, dashboard_id) => {
+    
+    const body = {
+        city: city,
+        isCelsius: isCelsius,
+        dashboard_id: dashboard_id
+    }
+
+    return axios.post(BASE_URL + 'widget/weather/create', body)
+}
+
+// Currency
+
+export const getAllcurrencies = () => {
+    return axios({
+        method: 'get',
+        url: BASE_URL + 'widget/currency/getAll',
+        timeout: 20000
+    })
+
+    return axios.get(BASE_URL + 'widget/currency/getAll')
+}
+
+export const getAllcurrenciesBrut = () => {
+    const headers = {
+        'Authorization': 'Basic ' + btoa('epitech766635432:fosm18i26is7m9usvfukb5b4em')
+    }
+    return axios.get('https://xecdapi.xe.com/v1/currencies.json/?obsolete=false', {headers})
+}
+
+export const compareCurrenies = (from, to) => {
+    const headers = {
+        'Authorization': 'Basic ' + btoa('epitech766635432:fosm18i26is7m9usvfukb5b4em')
+    }
+    console.log(`${from}${to}`)
+    return axios.get(`https://xecdapi.xe.com/v1/convert_from.json/?from=${from}&to=${to}`, {headers})
 }
 
 //GITHUB
