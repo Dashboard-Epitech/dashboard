@@ -9,11 +9,13 @@ import { SmallSpotifyTrack } from "./Track/SmallSpotifyTrack";
 import { MediumSpotifyPlaylist } from "./Playlist/MediumSpotifyPlaylist";
 import { SmallSpotifyPlaylist } from "./Playlist/SmallSpotifyPlaylist";
 import { LargeSpotifyPlaylist } from "./Playlist/LargeSpotifyPlaylist";
+import { AlertError } from "../../alerts/AlertError";
 
 export const NewSpotify = () => {
     const [size, setSize] = useState();
-    const [user, setUser] = useGlobalState("user");
-    const [userSpotifyToken, setUserSpotifyToken] = useState(null);
+    const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN")
+    const [user, setUser] = useGlobalState("USER");
+    const [userSpotifyToken, setUserSpotifyToken] = useState();
     const [isTokenExpired, setIsTokenExpired] = useState(false)
     const [error, setError] = useState(null);
     const [playlists, setPlaylists] = useState([]);
@@ -24,7 +26,7 @@ export const NewSpotify = () => {
     console.log(playlist);
 
     const getUserToken = () => {
-        ajax.getSpotifyToken(user.token)
+        ajax.getSpotifyToken(accessToken)
             .then((response) => {
                 setUserSpotifyToken(response.data.token)
                 setIsTokenExpired(response.data.tokenExpired)
@@ -35,7 +37,7 @@ export const NewSpotify = () => {
     }
 
     const refreshUserToken = () => {
-        ajax.refreshSpotifyToken(user.token)
+        ajax.refreshSpotifyToken(accessToken)
             .then((response) => {
                 setUserSpotifyToken(response.data.token);
                 setIsTokenExpired(response.data.tokenExpired);
@@ -47,7 +49,7 @@ export const NewSpotify = () => {
 
 
     const getUserPlaylists = () => {
-        ajax.getUserPlaylists(user.token)
+        ajax.getUserPlaylists(accessToken)
             .then((response) => {
                 setPlaylists(response.data.items)
             })
@@ -58,7 +60,7 @@ export const NewSpotify = () => {
     }
 
     const getRandomEminemTrack = () => {
-        ajax.getRandomEminemTrack(user.token)
+        ajax.getRandomEminemTrack(accessToken)
             .then((response) => {
                 setRandomTrack(response.data.id)
             })
@@ -121,37 +123,45 @@ export const NewSpotify = () => {
 
     return (
         <>
-            <Flex my={6}>
-                {!userSpotifyToken &&
+            {!userSpotifyToken &&
+                <Flex flexDir="column" mt={10} w="50%">
+                    <AlertError alertContent="You must authenticate with spotify to create spotify widgets"/>
                     <SpotifyAuthButton />
-                }
-                {playlists.length > 0 &&
-                    <FormControl w={"30%"}>
-                        <FormLabel>Playlists</FormLabel>
-                        <Select placeholder="Playlist" onChange={(e) => { setPlaylist(e.target.value) }}>
-                            {renderPlaylists()}
-                        </Select>
-                    </FormControl>
-                }
-            </Flex>
-            <Flex w={"40%"} justifyContent={"space-between"} mb={6}>
-                <Button onClick={() => { setWidgetType("track"); getRandomEminemTrack() }}>Random Track</Button>
-                <Button onClick={() => { setWidgetType("playlist"); }}>Full Playlist</Button>
-            </Flex>
-            <Flex w="40%" justifyContent="space-between" mb={6}>
-                <Button onClick={() => { setSize("SM") }}>
-                    Small
-                </Button>
-                <Button onClick={() => { setSize("MD") }}>
-                    Medium
-                </Button>
-                <Button onClick={() => { setSize("XL") }}>
-                    Large
-                </Button>
-            </Flex>
-            <Flex backgroundColor={"transparent"}>
-                {renderWidget()}
-            </Flex>
+                </Flex>
+            }
+            {userSpotifyToken &&
+                <Flex flexDir={"column"}>
+                    <Flex my={6}>
+                        {playlists.length > 0 &&
+                            <FormControl w={"30%"}>
+                                <FormLabel>Playlists</FormLabel>
+                                <Select placeholder="Playlist" onChange={(e) => { setPlaylist(e.target.value) }}>
+                                    {renderPlaylists()}
+                                </Select>
+                            </FormControl>
+                        }
+                    </Flex>
+                    <Flex w={"50%"} justifyContent={"space-between"} mb={6}>
+                        <Button onClick={() => { setWidgetType("track"); getRandomEminemTrack() }}>Random Eminem Track</Button>
+                        <Button onClick={() => { setWidgetType("playlist"); }}>Full Playlist</Button>
+                    </Flex>
+                    <Flex w="40%" justifyContent="space-between" mb={6}>
+                        <Button onClick={() => { setSize("SM") }}>
+                            Small
+                        </Button>
+                        <Button onClick={() => { setSize("MD") }}>
+                            Medium
+                        </Button>
+                        <Button onClick={() => { setSize("XL") }}>
+                            Large
+                        </Button>
+                    </Flex>
+                    <Flex backgroundColor={"transparent"}>
+                        {renderWidget()}
+                    </Flex>
+                </Flex>
+            }
         </>
+
     )
 }

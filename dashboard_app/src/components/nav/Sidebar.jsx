@@ -22,7 +22,7 @@ export const Sidebar = () => {
             pos="sticky"
             h="100%"
             boxShadow="md"
-            w={navSize == "small" ? "75px" : "300px"}
+            w={navSize == "small" ? "75px" : "350px"}
             borderRadius={navSize == "small" ? "0px 15px 15px 0px" : "0px 30px 30px 0px"}
             flexDir={"column"}
             justifyContent="space-between"
@@ -79,7 +79,7 @@ export const Sidebar = () => {
                         ml={4}
                         display={navSize == "small" ? "none" : "flex"}
                     >
-                        <Heading >{user.userUsername}</Heading>
+                        <Heading size={"xl"}>{user ? user.userUsername : null}</Heading>
                     </Flex>
                 </Flex>
             </Flex>

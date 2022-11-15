@@ -4,10 +4,11 @@ import { useGlobalState } from "../../../state"
 import * as ajax from "../../../lib/ajax"
 
 const SpotifyAuthButton = () => {
-    const [user, setUser] = useGlobalState("user");
+    const [user, setUser] = useGlobalState("USER");
+    const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
 
     const getSpotifyUserLogin = () => {
-        ajax.authSpotify(user.token)
+        ajax.authSpotify(accessToken)
             .then((response) => {
                 window.location.replace(response.data)
             })
@@ -17,7 +18,7 @@ const SpotifyAuthButton = () => {
     }
 
     return(
-        <Button leftIcon={<FaSpotify />} onClick={(e) => getSpotifyUserLogin(e)} colorScheme="green">Authenticate Spotify</Button>
+        <Button leftIcon={<FaSpotify />} onClick={() => getSpotifyUserLogin()} colorScheme="green" w={'60%'}>Authenticate Spotify</Button>
     )
 }
 

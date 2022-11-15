@@ -17,11 +17,13 @@ import { useGlobalState } from '../../state';
 
 const LogoutModal = ({isOpen, onClose}) => {
     const [user, setUser] = useGlobalState('USER');
+    const [accessToken, setAccessToken] = useGlobalState('ACCESS_TOKEN');
 
     const handleLogout = (e) => {
         e.preventDefault();
         localStorage.clear();
         setUser(null);
+        setAccessToken(null);
         onClose();
         return <Navigate to="/auth/login" />
     }

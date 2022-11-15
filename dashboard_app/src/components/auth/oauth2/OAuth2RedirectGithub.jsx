@@ -2,7 +2,7 @@ import { Navigate, useSearchParams } from "react-router-dom"
 import { useGlobalState } from "../../../state";
 import { Nav } from "../../nav/Nav";
 
-export const OAuth2Redirect = () => {
+export const OAuth2RedirectGithub = () => {
     const [accessToken, setAccessToken] = useGlobalState('ACCESS_TOKEN');
     const [queryParam, setQueryParam] = useSearchParams();
 

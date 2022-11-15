@@ -8,4 +8,6 @@ import lombok.Getter;
 public class DashBoardRequest {
     @NotNull(message = "Please enter a name for your dashboard")
     private String name;
+
+    private Long user_id;
 }

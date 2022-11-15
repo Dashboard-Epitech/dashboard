@@ -87,46 +87,11 @@ public class DashboardUser {
   @UpdateTimestamp
   private LocalDate dateUpdated;
 
-  // @ManyToMany
-  // @OnDelete(action = OnDeleteAction.CASCADE)
-  // private Collection<Role> roles;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private List<DashBoard> dashBoards = new ArrayList<>();
 
-  // @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-  // @JsonIgnore
-  // private List<DashBoard> dashBoards = new ArrayList<>();
-
-  // @OneToOne
-  // @JoinColumn(name = "spotify_token_id")
-  // private SpotifyToken spotifyToken;
-
-  // public DashboardUser toSafeData() {
-  //   DashboardUser safeData = new DashboardUser();
-  //   safeData.setUsername(username)
-  //           .setId(id)
-  //           .setEmail(email)
-  //           .setRoles(roles)
-  //           .setVerified(verified);
-
-  //   return safeData;
-  // }
-
-  // @Override
-  // public boolean isAccountNonExpired() {
-  //   return true;
-  // }
-
-  // @Override
-  // public boolean isAccountNonLocked() {
-  //   return true;
-  // }
-
-  // @Override
-  // public boolean isCredentialsNonExpired() {
-  //   return true;
-  // }
-
-  // @Override
-  // public Collection<? extends GrantedAuthority> getAuthorities() {
-  //   return Collections.EMPTY_LIST;
-  // }
+  @OneToOne
+  @JoinColumn(name = "spotify_token_id")
+  private SpotifyToken spotifyToken;
 }
