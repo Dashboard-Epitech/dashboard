@@ -16,16 +16,12 @@ export const authRegister = (username, email, password) => {
     })
 }
 
-export const getUserData = (email, token) => {
-    const headers = {
-        'Authorization': 'Bearer ' + token,
-    }
-    
-    const body = {
-        email: email
-    }
-
-    return axios.post(BASE_URL + 'user/get', body, {headers}); 
+export const getUserData = (token) => {
+    return axios.get(BASE_URL + 'user/get', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }); 
 }
 
 // Weather
@@ -86,13 +82,23 @@ export const authGithub = () => {
 //SPOTIFY 
 
 export const authSpotify = (token) => {
-    const headers = {
-        'Authorization': 'Bearer ' + token,
-    }
-
-    return axios.get(BASE_URL + 'spotify/login', {headers})
+    return axios.get(BASE_URL + 'spotify/login', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
 }
 
+export const bindSpotifyToken = (apiToken, spotifyToken, spotifyRefresh) => {
+    return axios.post(BASE_URL + 'spotify/token/bind', {
+        token: spotifyToken,
+        refresh: spotifyRefresh
+    }, {
+        headers: {
+            Authorization: `Bearer ${apiToken}`
+        }
+    })
+}
 export const getSpotifyToken = (token) => {
     return axios.get(BASE_URL + 'spotify/usertoken', {
         headers: {

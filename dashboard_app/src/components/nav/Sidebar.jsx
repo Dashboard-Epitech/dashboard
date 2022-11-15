@@ -9,7 +9,8 @@ import LogoutModal from "../modals/LogoutModal";
 import { SidebarLogout } from "./SidebarLogout";
 
 export const Sidebar = () => {
-    const [user, setUser] = useGlobalState('user')
+    const [accessToken, setAccessToken] = useGlobalState('ACCESS_TOKEN');
+    const [user, setUser] = useGlobalState("USER");
     const [navSize, setNavSize] = useState("large");
     const { toggleColorMode } = useColorMode();
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -21,7 +22,7 @@ export const Sidebar = () => {
             pos="sticky"
             h="100%"
             boxShadow="md"
-            w={navSize == "small" ? "75px" : "300px"}
+            w={navSize == "small" ? "75px" : "350px"}
             borderRadius={navSize == "small" ? "0px 15px 15px 0px" : "0px 30px 30px 0px"}
             flexDir={"column"}
             justifyContent="space-between"
@@ -78,8 +79,7 @@ export const Sidebar = () => {
                         ml={4}
                         display={navSize == "small" ? "none" : "flex"}
                     >
-                        <Heading >{user.username}</Heading>
-                        <Text>{user.role}</Text>
+                        <Heading size={"xl"}>{user ? user.userUsername : null}</Heading>
                     </Flex>
                 </Flex>
             </Flex>

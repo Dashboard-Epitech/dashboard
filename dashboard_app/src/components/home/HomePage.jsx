@@ -4,13 +4,30 @@ import { Navigate, Outlet } from "react-router-dom"
 import { useGlobalState } from "../../state"
 import { Nav } from "../nav/Nav"
 import { Sidebar } from "../nav/Sidebar"
+import * as ajax from "../../lib/ajax";
 
 export const HomePage = () => {
-    const [user, setUser] = useGlobalState("user");
-    if (!user) {
-        return <Navigate to="/auth/login" />
-    }
+    const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
+    const [user, setUser] = useGlobalState("USER");
 
+    if (!accessToken) {
+        return <Navigate to="/auth/login" />
+    } else if (!user) {
+        ajax.getUserData(accessToken)
+            .then((response) => {
+                let userData = {
+                    userId: response.data.id,
+                    userEmail: response.data.email,
+                    userUsername: response.data.username
+                }
+
+                setUser(userData)
+                localStorage.setItem('USER', JSON.stringify(userData));
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     return (
         <Flex p={0} flexDirection={"column"} h={"100vh"}>

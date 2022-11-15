@@ -1,13 +1,12 @@
 import { Box, Flex, Grid, GridItem, Image, Text } from "@chakra-ui/react"
 import { WidgetType } from "./NewWidgetDrawer"; 
 import { useContext } from "react";
-import { FaDollarSign, FaSpotify, FaYoutube } from "react-icons/fa";
+import { FaDollarSign, FaGithub, FaSpotify, FaYoutube } from "react-icons/fa";
 import { TiWeatherPartlySunny } from 'react-icons/ti'
 
 import { useGlobalState } from "../../../state"
 
 export const WidgetTypesGrid = () => {
-    const [user, setUser] = useGlobalState("user");
     const { widgetType, setWidgetType } = useContext(WidgetType);
 
     return (
@@ -70,10 +69,10 @@ export const WidgetTypesGrid = () => {
                 <GridItem>
                     <Flex h={"100%"} justifyContent={"space-between"} alignItems={"center"} flexDir="column" p={4} backgroundColor="gray.600" borderRadius={"20px"}>
                         <Flex>
-                            <Image boxSize={"60px"} src="/icons/gege.png" />
+                            <FaGithub size={"4rem"} />
                         </Flex>
                         <Flex>
-                            <Text fontWeight={"bold"} fontSize="2xl">Epitech</Text>
+                            <Text fontWeight={"bold"} fontSize="2xl">Github</Text>
                         </Flex>
                     </Flex>
                 </GridItem>

@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-// import com.dashboard.api.Entity.SpotifyToken;
+import com.dashboard.api.Entity.SpotifyToken;
 import com.dashboard.api.Entity.DashboardUser;
 import com.dashboard.api.Exception.EmailAlreadyInUseException;
 import com.dashboard.api.Exception.NoDataFoundException;
@@ -20,7 +20,7 @@ import com.dashboard.api.Exception.UsernameAlreadyInUseException;
 import com.dashboard.api.Model.Enum.AuthProviderEnum;
 import com.dashboard.api.Model.Request.LocalAuthRegisterRequest;
 import com.dashboard.api.Model.Response.TokenResponse;
-// import com.dashboard.api.Repository.SpotifyTokenRepository;
+import com.dashboard.api.Repository.SpotifyTokenRepository;
 import com.dashboard.api.Repository.DashboardUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import net.bytebuddy.utility.RandomString;
 public class UserService {
     private final MailService mailService;
     private final DashboardUserRepository userRepository;
-    // private final SpotifyTokenRepository spotifyTokenRepository;
+    private final SpotifyTokenRepository spotifyTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DashboardUser getUser(Long id) throws UserNotFoundException {

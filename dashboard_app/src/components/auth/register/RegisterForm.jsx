@@ -33,7 +33,6 @@ import { AlertSuccess } from '../../alerts/AlertSuccess'
 
 export const RegisterForm = () => {
     const { toggleColorMode } = useColorMode();
-    const [user, setUser] = useGlobalState("user");
     const [errors, setErrors] = useState(null);
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');

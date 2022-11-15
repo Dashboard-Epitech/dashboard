@@ -5,7 +5,8 @@ import { Sidebar } from "../nav/Sidebar";
 import { NewWidgetDrawer } from "../widgets/controls/NewWidgetDrawer";
 
 export const Dashboard = () => {
-    const [user, setUser] = useGlobalState("user");
+    const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
+    const [user, setUser] = useGlobalState("USER");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const gridColLayout = useBreakpointValue(
         {

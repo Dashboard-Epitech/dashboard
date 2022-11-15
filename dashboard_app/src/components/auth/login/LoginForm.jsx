@@ -33,7 +33,7 @@ import * as ajax from '../../../lib/ajax'
 export const LoginForm = () => {
     const { toggleColorMode } = useColorMode();
     const navigate = useNavigate();
-    const [user, setUser] = useGlobalState("user");
+    const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
     const [errors, setErrors] = useState(null);
     const [userEmail, setUserEmail] = useState();
     const [userPassword, setUserPassword] = useState();
@@ -53,24 +53,9 @@ export const LoginForm = () => {
 
         ajax.authLogin(userEmail, userPassword)
             .then((response) => {
-                ajax.getUserData(response.data.email, response.data.accessToken)
-                    .then((response2) => {
-                        var userData = {
-                            id: response2.data.id,
-                            username: response2.data.username,
-                            email: response2.data.email,
-                            roles: response2.data.roles,
-                            token: response.data.accessToken
-                        };
-
-                        setErrors(null);
-                        setUser(userData);
-                        localStorage.setItem("user", JSON.stringify(userData));
-                        navigate("/dashboard")
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                setAccessToken(response.data.token);
+                localStorage.setItem("ACCESS_TOKEN", response.data.token)
+                navigate("/dashboard")
             })
             .catch((error) => {
                 console.log(error)
@@ -95,7 +80,7 @@ export const LoginForm = () => {
                 tmp.push(<AlertWarning alertContent={errors.errorContents} />)
                 break;
             case "badCredentialsError":
-                tmp.push(<AlertWarning alertContent={errors.errorContents} />)
+                tmp.push(<AlertError alertContent={errors.errorContents} />)
                 break;
             default:
                 break;

@@ -8,15 +8,14 @@ import { RegisterForm } from './components/auth/register/RegisterForm';
 import { AlertSuccess } from './components/alerts/AlertSuccess';
 import { HomePage } from './components/home/HomePage';
 import WebFont from 'webfontloader';
-import LogoutModal from './components/modals/LogoutModal';
 import { WidgetMenu } from './components/widgets/WidgetMenu';
 import { WidgetControls } from './components/widgets/WidgetControls';
 import { NewWidget } from './components/widgets/NewWidget';
 import { NewWeather } from './components/widgets/weather/NewWeather';
+import { OAuth2RedirectGithub } from './components/auth/oauth2/OAuth2RedirectGithub';
+import { OAuth2RedirectSpotify } from './components/auth/oauth2/OAuth2RedirectSpotify';
 
 function App() {
-  const [user, setUser] = useGlobalState("user");
-
   useEffect(() => {
     WebFont.load({
       google: {
@@ -44,6 +43,12 @@ function App() {
               <Route path='verified' element={<AlertSuccess alertContent="Account Verified. Please log in !" />} />
             </Route>
             <Route path='register' element={<RegisterForm />} />
+          </Route>
+          <Route path="/oauth2">
+            <Route path="redirect">
+              <Route path="github" element={<OAuth2RedirectGithub />}/>
+              <Route path="spotify" element={<OAuth2RedirectSpotify />}/>
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

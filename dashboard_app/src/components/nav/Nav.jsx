@@ -1,7 +1,7 @@
 import { Flex, Spacer } from '@chakra-ui/react';
 import * as React from 'react'
 import Brand from './Brand';
-import NavMenu, { Socials } from './Menu';
+import { Socials } from './Socials';
 
 export const Nav = () => {
     return (

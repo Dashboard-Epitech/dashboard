@@ -6,9 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class DashBoardRequest {
-    @NotNull(message = "give name")
+    @NotNull(message = "Please enter a name for your dashboard")
     private String name;
 
-    @NotNull(message = "give user_id")
     private Long user_id;
 }

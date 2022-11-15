@@ -40,8 +40,8 @@ public class DashboardUserPrincipal implements OAuth2User, UserDetails {
 
         return new DashboardUserPrincipal(
             user.getId(),
-            user.getUsername(),
             user.getEmail(), 
+            user.getUsername(),
             user.getPassword(), 
             user.isVerified(),
             authorities

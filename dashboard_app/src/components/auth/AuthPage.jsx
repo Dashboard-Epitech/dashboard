@@ -19,7 +19,6 @@ import { FaMoon, FaSun } from 'react-icons/fa'
 
 export const AuthPage = () => {
     const { toggleColorMode } = useColorMode();
-    const [user, setUser] = useGlobalState("user");
     const formBackground = useColorModeValue("gray.100", "gray.700");
     const pageBackground = useColorModeValue("gray.300", "gray.500");
     const colorIcons = useColorModeValue(<FaSun />, <FaMoon />)
