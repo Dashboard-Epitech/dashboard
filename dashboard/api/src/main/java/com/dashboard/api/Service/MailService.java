@@ -23,7 +23,7 @@ public class MailService {
             email.setRecipient(RecipientType.TO, new InternetAddress(user.getEmail(), user.getUsername()));
             email.setFrom(new InternetAddress(REGISTRATION_SENDER));
             email.setSubject("Dashboard User Account Verification");
-            email.setContent("<a href=\"http://dashboard.io:8080/api/auth/verify/" + user.getId() + "/" + verificationCode + "\">Click this link to verify your account</a>", "text/html");
+            email.setContent("<a href=\"http://localhost:8080/api/auth/verify/" + user.getId() + "/" + verificationCode + "\">Click this link to verify your account</a>", "text/html");
     
             javaMailSender.send(email);
         } catch (Exception ex) {

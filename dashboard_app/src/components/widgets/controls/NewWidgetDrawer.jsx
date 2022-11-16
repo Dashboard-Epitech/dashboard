@@ -2,14 +2,13 @@ import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, Dra
 import { createContext, useState } from "react"
 import { NewCurrency } from "../currency/NewCurrency";
 import { NewSpotify } from "../spotify/NewSpotify";
-import { NewWeather } from "../weather/NewWeather";
+import { NewWeather } from "../weather/NewWeather.jsx";
 import { WidgetTypesGrid } from "./WidgetTypeGrid";
 
 export const WidgetType = createContext();
 
 export const NewWidgetDrawer = ({ isOpen, onClose, dashboardId }) => {
     const [widgetType, setWidgetType] = useState(null);
-    console.log(dashboardId)
     return (
         <Drawer onClose={onClose} isOpen={isOpen} size="xl">
             <DrawerOverlay />

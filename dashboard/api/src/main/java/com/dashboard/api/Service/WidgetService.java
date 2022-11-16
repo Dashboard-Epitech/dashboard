@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.DashBoard;
+import com.dashboard.api.Entity.SpotifyWidget;
 import com.dashboard.api.Entity.WeatherWidget;
 import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Model.Request.widget.weather.CreateWeatherWidgetRequest;
@@ -98,6 +99,29 @@ public class WidgetService {
             widgetRepository.save(weatherWidget);
 
             return weatherWidget;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public SpotifyWidget createSpotifyWidget(Long dashboardId, String type, String size, String trackId, String playlistId) throws Exception {
+        try {
+            Optional<DashBoard> optional = dashBoardRepository.findById(dashboardId);
+            if (!optional.isPresent()) {
+                throw new Exception("Dashboard not found");
+            }
+
+            DashBoard dashboard = optional.get();
+            SpotifyWidget spotifyWidget = new SpotifyWidget();
+            spotifyWidget.setCategory("SPOTIFY")
+                         .setType(type)
+                         .setSize(size)
+                         .setTrackId(trackId)
+                         .setPlaylistId(playlistId)
+                         .setDashBoard(dashboard)
+            ;
+
+            return widgetRepository.save(spotifyWidget);
         } catch (Exception ex) {
             throw ex;
         }

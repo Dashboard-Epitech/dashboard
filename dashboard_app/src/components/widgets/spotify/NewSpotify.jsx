@@ -10,8 +10,9 @@ import { MediumSpotifyPlaylist } from "./Playlist/MediumSpotifyPlaylist";
 import { SmallSpotifyPlaylist } from "./Playlist/SmallSpotifyPlaylist";
 import { LargeSpotifyPlaylist } from "./Playlist/LargeSpotifyPlaylist";
 import { AlertError } from "../../alerts/AlertError";
+import axios from "axios";
 
-export const NewSpotify = () => {
+export const NewSpotify = ({ dashboardId }) => {
     const [size, setSize] = useState();
     const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN")
     const [user, setUser] = useGlobalState("USER");
@@ -110,6 +111,11 @@ export const NewSpotify = () => {
         }
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        ajax.createSpotifyWidget(accessToken, dashboardId,)
+    }
+
     if (!userSpotifyToken) {
         getUserToken();
     }
@@ -125,41 +131,46 @@ export const NewSpotify = () => {
         <>
             {!userSpotifyToken &&
                 <Flex flexDir="column" mt={10} w="50%">
-                    <AlertError alertContent="You must authenticate with spotify to create spotify widgets"/>
+                    <AlertError alertContent="You must authenticate with spotify to create spotify widgets" />
                     <SpotifyAuthButton />
                 </Flex>
             }
             {userSpotifyToken &&
-                <Flex flexDir={"column"}>
-                    <Flex my={6}>
-                        {playlists.length > 0 &&
-                            <FormControl w={"30%"}>
-                                <FormLabel>Playlists</FormLabel>
-                                <Select placeholder="Playlist" onChange={(e) => { setPlaylist(e.target.value) }}>
-                                    {renderPlaylists()}
-                                </Select>
-                            </FormControl>
-                        }
+                <form onSubmit={(e) => { handleSubmit(e) }}>
+                    <Flex flexDir={"column"}>
+                        <Flex my={6}>
+                            {playlists.length > 0 &&
+                                <FormControl w={"30%"}>
+                                    <FormLabel>Playlists</FormLabel>
+                                    <Select placeholder="Playlist" onChange={(e) => { setPlaylist(e.target.value) }}>
+                                        {renderPlaylists()}
+                                    </Select>
+                                </FormControl>
+                            }
+                        </Flex>
+                        <Flex w={"50%"} justifyContent={"space-between"} mb={6}>
+                            <Button onClick={() => { setWidgetType("track"); getRandomEminemTrack() }}>Random Eminem Track</Button>
+                            <Button onClick={() => { setWidgetType("playlist"); }}>Full Playlist</Button>
+                        </Flex>
+                        <Flex w="40%" justifyContent="space-between" mb={6}>
+                            <Button onClick={() => { setSize("SM") }}>
+                                Small
+                            </Button>
+                            <Button onClick={() => { setSize("MD") }}>
+                                Medium
+                            </Button>
+                            <Button onClick={() => { setSize("XL") }}>
+                                Large
+                            </Button>
+                        </Flex>
+                        <Flex backgroundColor={"transparent"} mb={2}>
+                            {renderWidget()}
+                        </Flex>
+                        <Flex w='40px'>
+                            <Button type="submit" colorScheme={"whatsapp"}>Ok</Button>
+                        </Flex>
                     </Flex>
-                    <Flex w={"50%"} justifyContent={"space-between"} mb={6}>
-                        <Button onClick={() => { setWidgetType("track"); getRandomEminemTrack() }}>Random Eminem Track</Button>
-                        <Button onClick={() => { setWidgetType("playlist"); }}>Full Playlist</Button>
-                    </Flex>
-                    <Flex w="40%" justifyContent="space-between" mb={6}>
-                        <Button onClick={() => { setSize("SM") }}>
-                            Small
-                        </Button>
-                        <Button onClick={() => { setSize("MD") }}>
-                            Medium
-                        </Button>
-                        <Button onClick={() => { setSize("XL") }}>
-                            Large
-                        </Button>
-                    </Flex>
-                    <Flex backgroundColor={"transparent"}>
-                        {renderWidget()}
-                    </Flex>
-                </Flex>
+                </form>
             }
         </>
 

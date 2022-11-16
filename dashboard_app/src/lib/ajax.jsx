@@ -34,6 +34,16 @@ export const getUserDashboards = (token) => {
     }); 
 }
 
+export const getDashboardData = (token, dashboardId) => {
+    return axios.post(BASE_URL + 'dashboard/get/data', {
+        dashboardId: dashboardId
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
 export const getDashboardWidgets = (token, dashboardId) => {
     return axios.post(BASE_URL + 'dashboard/get/widgets', 
     {
@@ -95,16 +105,6 @@ export const setWeatherWidget = (city, isCelsius, dashboard_id) => {
 
 // Currency
 
-export const getAllcurrencies = () => {
-    return axios({
-        method: 'get',
-        url: BASE_URL + 'widget/currency/getAll',
-        timeout: 20000
-    })
-
-    return axios.get(BASE_URL + 'widget/currency/getAll')
-}
-
 export const getAllcurrenciesBrut = () => {
     const headers = {
         'Authorization': 'Basic ' + btoa('epitech766635432:fosm18i26is7m9usvfukb5b4em')
@@ -127,6 +127,20 @@ export const authGithub = () => {
 }
 
 //SPOTIFY 
+
+export const createSpotifyWidget = (token, dashboardId, type, size, trackId, playlistId) => {
+    return axios.post(BASE_URL + 'widget/create/spotify', {
+        dashboardId: dashboardId,
+        type: type,
+        size: size,
+        trackId: trackId,
+        playlistId: playlistId
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
 
 export const authSpotify = (token) => {
     return axios.get(BASE_URL + 'spotify/login', {

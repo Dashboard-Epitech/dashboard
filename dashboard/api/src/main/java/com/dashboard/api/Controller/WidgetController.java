@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.api.Error.WidgetResponseError;
+import com.dashboard.api.Model.Request.widget.weather.CreateSpotifyWidget;
 import com.dashboard.api.Model.Request.widget.weather.CreateWeatherWidgetRequest;
 import com.dashboard.api.Request.WidgetRequest;
 import com.dashboard.api.Service.WidgetService;
@@ -37,6 +38,17 @@ public class WidgetController {
         try {
             return ResponseEntity.ok().body(
                 widgetService.createWeatherWidget(request.getDashboardId(), request.getCity(), request.getUnit(), request.getSize(), request.getRefreshRate())
+            );
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/create/spotify")
+    public ResponseEntity<?> createSpotifyWidget(@RequestBody CreateSpotifyWidget request) {
+        try {
+            return ResponseEntity.ok().body(
+                widgetService.createSpotifyWidget(request.getDashboardId(), request.getType(), request.getSize(), request.getTrackId(), request.getPlaylistId())
             );
         } catch (Exception ex) {
             return ResponseEntity.internalServerError().body(ex.getMessage());

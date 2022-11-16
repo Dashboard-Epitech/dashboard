@@ -134,4 +134,13 @@ public class DashBoardService {
 
         return widgets;
     }
+
+    public DashBoard getDashboardData(Long id) throws Exception {
+        Optional<DashBoard> optional = this.dashBoardRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Dashboard Not found");
+        }
+
+        return optional.get();
+    }
 }

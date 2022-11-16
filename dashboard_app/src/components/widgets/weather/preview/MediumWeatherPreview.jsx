@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaQuestion } from "react-icons/fa";
 import { TiWeatherPartlySunny } from "react-icons/ti";
 
-export const MediumWeather = ({city, temp, unit, weatherDesc, weatherIcon, weatherBackground}) => {
+export const MediumWeatherPreview = ({city, temp, unit, weatherDesc, weatherIcon, weatherBackground}) => {
     const renderWeatherIcon = () => {
         return weatherIcon ? <Image src={`/weather/icon/${weatherIcon}.png`} boxSize={"80px"}></Image> : <FaQuestion size="5rem"/>;
     }

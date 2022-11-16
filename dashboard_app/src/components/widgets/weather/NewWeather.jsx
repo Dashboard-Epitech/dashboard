@@ -1,10 +1,10 @@
 import { Button, Flex, FormControl, FormLabel, Input, Text } from "@chakra-ui/react"
 import { useState } from "react";
-import { LargeWeather } from "./LargeWeather";
 import * as ajax from "../../../lib/ajax";
-import { MediumWeather } from "./MediumWeather";
-import { SmallWeather } from "./SmallWeather";
 import { useGlobalState } from "../../../state";
+import { MediumWeatherPreview } from "./preview/MediumWeatherPreview";
+import { SmallWeatherPreview } from "./preview/SmallWeatherPreview";
+import { LargeWeatherPreview } from "./preview/LargeWeatherPreview";
 
 export const NewWeather = ({dashboardId}) => {
     const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
@@ -18,22 +18,19 @@ export const NewWeather = ({dashboardId}) => {
     const [weatherDesc, setWeatherDesc] = useState("Description");
     const [weatherBackground, setWeatherBackground] = useState(null);
 
-    console.log(dashboardId);
-
     const renderWidget = () => {
         if (error) {
             return <Flex><Text>{error}</Text></Flex>
         }
         switch (size) {
             case "XL":
-                return (<LargeWeather city={city} temp={temp} unit={unit} weatherDesc={weatherDesc} weatherIcon={weatherIcon} weatherBackground={weatherBackground} />)
+                return (<LargeWeatherPreview city={city} temp={temp} unit={unit} weatherDesc={weatherDesc} weatherIcon={weatherIcon} weatherBackground={weatherBackground} />)
             case "MD":
-                return (<MediumWeather city={city} temp={temp} unit={unit} weatherDesc={weatherDesc} weatherIcon={weatherIcon} weatherBackground={weatherBackground} />)
+                return (<MediumWeatherPreview city={city} temp={temp} unit={unit} weatherDesc={weatherDesc} weatherIcon={weatherIcon} weatherBackground={weatherBackground} />)
             case "SM":
-                return (<SmallWeather city={city} temp={temp} unit={unit} weatherDesc={weatherDesc} weatherIcon={weatherIcon} weatherBackground={weatherBackground} />)
-
-        }
-        if (size == "XL") {
+                return (<SmallWeatherPreview city={city} temp={temp} unit={unit} weatherDesc={weatherDesc} weatherIcon={weatherIcon} weatherBackground={weatherBackground} />)
+            default:
+                return
         }
     }
 
@@ -41,7 +38,6 @@ export const NewWeather = ({dashboardId}) => {
         ajax.getWeather(accessToken, city, unit)
             .then((response) => {
                 if (response.data.cod == 200) {
-                    console.log(response)
                     setTemp(Math.round(response.data.main.temp))
                     setWeatherDesc(response.data.weather[0].description)
                     setWeatherIcon(response.data.weather[0].icon)

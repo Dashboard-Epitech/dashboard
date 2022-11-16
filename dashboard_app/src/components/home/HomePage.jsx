@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet, useNavigate } from "react-router-dom"
 import { useGlobalState } from "../../state"
 import { Nav } from "../nav/Nav"
 import { Sidebar } from "../nav/Sidebar"
@@ -9,6 +9,7 @@ import * as ajax from "../../lib/ajax";
 export const HomePage = () => {
     const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
     const [user, setUser] = useGlobalState("USER");
+    const navigate = useNavigate();
 
     if (!accessToken) {
         return <Navigate to="/auth/login" />
@@ -18,14 +19,15 @@ export const HomePage = () => {
                 let userData = {
                     userId: response.data.id,
                     userEmail: response.data.email,
-                    userUsername: response.data.username
+                    userUsername: response.data.username,
+                    userProvider: response.data.provider
                 }
 
                 setUser(userData)
                 localStorage.setItem('USER', JSON.stringify(userData));
             })
             .catch((error) => {
-                console.log(error)
+                navigate("/auth/login")
             })
     }
 
