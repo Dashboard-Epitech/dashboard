@@ -122,4 +122,16 @@ public class DashBoardService {
 
         return dashBoard;
     }
+
+    public List<Widget> getDashboardWidgets(Long id) throws Exception {
+        Optional<DashBoard> optional = this.dashBoardRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Dashboard Not found");
+        }
+
+        DashBoard dashboard = optional.get();
+        List<Widget> widgets = dashboard.getWidgets();
+
+        return widgets;
+    }
 }

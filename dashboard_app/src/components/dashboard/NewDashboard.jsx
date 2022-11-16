@@ -17,7 +17,7 @@ export const NewDashboard = () => {
         e.preventDefault();
         ajax.newDashboard(accessToken, dashboardName)
             .then((response) => {
-                navigate("../")
+                navigate(`./${response.data.id}`)
             })
             .catch((error) => {
                 console.log(error)

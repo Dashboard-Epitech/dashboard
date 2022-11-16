@@ -20,17 +20,6 @@ export const Dashboards = () => {
     const [checked, setChecked] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
-    const gridColLayout = useBreakpointValue(
-        {
-            sm: 'repeat(3, 1fr)',
-            md: 'repeat(4, 1fr)',
-            lg: 'repeat(5, 1fr)'
-        }
-    )
-
-    console.log(dashboardId)
-
-
 
     const getDashboards = () => {
         ajax.getUserDashboards(accessToken)
@@ -45,11 +34,7 @@ export const Dashboards = () => {
 
     if (dashboards.length == 0 && !checked) {
         getDashboards();
-
-    } else if (dashboards.length == 0 && checked && !isNew) {
-        setIsNew(true);
-        navigate("./new")
-    } 
+    }
 
     return (
         <Flex w={"100%"} h={"100%"}>
@@ -57,10 +42,10 @@ export const Dashboards = () => {
                 {dashboards.length == 0 && checked && 
                     <NewDashboard />
                 }
-                {dashboards.length > 0 && !dashboardId &&
+                {dashboards.length > 0 && !dashboardId.id &&
                     <DashboardsGrid dashboards={dashboards} />
                 }
-                {dashboardId && 
+                {dashboardId.id && 
                     <SingleDashboard dashboardId={dashboardId}/>
                 }
             </Flex>

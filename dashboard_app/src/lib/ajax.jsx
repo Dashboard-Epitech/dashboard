@@ -34,6 +34,14 @@ export const getUserDashboards = (token) => {
     }); 
 }
 
+export const getDashboardWidgets = (token, dashboardId) => {
+    return axios.get(BASE_URL + 'dashboard/get/widgets', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
 export const newDashboard = (token, name) => {
     return axios.post(BASE_URL + 'dashboard/create', {
         name: name
@@ -46,13 +54,29 @@ export const newDashboard = (token, name) => {
 
 // Weather
 
-export const getWeather = (city, isCelsius, dashboard_id) => {
-    const body = {
+export const getWeather = (token, city, unit) => {
+    return axios.post(BASE_URL + 'weather_api/get', {
         city: city,
-        isCelsius: isCelsius,
-        dashboard_id: dashboard_id
-    }
-    return axios.post(BASE_URL + 'widget/weather/search', body, {headers : "Access-Control-Allow-Origin: * "})
+        unit: unit,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
+export const newWeatherWidget = (token, dashboardId, city, unit, size, refreshRate) => {
+    return axios.post(BASE_URL + 'widget/create/weather', {
+        dashboardId: dashboardId,
+        city: city,
+        unit: unit,
+        size: size,
+        refreshRate: refreshRate
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
 }
 
 export const setWeatherWidget = (city, isCelsius, dashboard_id) => {

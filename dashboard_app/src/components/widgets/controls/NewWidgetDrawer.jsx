@@ -7,8 +7,9 @@ import { WidgetTypesGrid } from "./WidgetTypeGrid";
 
 export const WidgetType = createContext();
 
-export const NewWidgetDrawer = ({ isOpen, onClose }) => {
+export const NewWidgetDrawer = ({ isOpen, onClose, dashboardId }) => {
     const [widgetType, setWidgetType] = useState(null);
+    console.log(dashboardId)
     return (
         <Drawer onClose={onClose} isOpen={isOpen} size="xl">
             <DrawerOverlay />
@@ -20,15 +21,15 @@ export const NewWidgetDrawer = ({ isOpen, onClose }) => {
                         <WidgetTypesGrid />
                         {
                             widgetType && widgetType == "weather" && 
-                            <NewWeather />
+                            <NewWeather dashboardId={dashboardId}/>
                         }
                         {
                             widgetType && widgetType == "spotify" && 
-                            <NewSpotify />
+                            <NewSpotify dashboardId={dashboardId}/>
                         }
                         {
                             widgetType && widgetType == "currency" && 
-                            <NewCurrency />
+                            <NewCurrency dashboardId={dashboardId}/>
                         }
                     </DrawerBody>
                 </DrawerContent>

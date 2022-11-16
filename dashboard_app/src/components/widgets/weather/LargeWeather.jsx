@@ -5,7 +5,7 @@ import { TiWeatherPartlySunny } from "react-icons/ti";
 
 export const LargeWeather = ({city, temp, unit, weatherDesc, weatherIcon, weatherBackground}) => {
     const renderWeatherIcon = () => {
-        return weatherIcon ? <Image src={weatherIcon} boxSize={"80px"}></Image> : <FaQuestion size="5rem"/>;
+        return weatherIcon ? <Image src={`/weather/icon/${weatherIcon}.png`} boxSize={"80px"}></Image> : <FaQuestion size="5rem"/>;
     }
 
     return (
@@ -13,7 +13,7 @@ export const LargeWeather = ({city, temp, unit, weatherDesc, weatherIcon, weathe
             <Flex 
                 w={"100%"} 
                 h="200px" 
-                backgroundImage={weatherBackground ?? null} 
+                backgroundImage={weatherBackground ? `/weather/back/${weatherBackground}.jpg` : null} 
                 backgroundPosition="center" 
                 backgroundSize="cover" 
                 backGroundColor={"gray.600"} 

@@ -16,17 +16,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 public abstract class Widget {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "dashBoard_id")
+    @JoinColumn(name = "dashboard_id")
     @Setter
     @JsonIgnore
     private DashBoard dashBoard;

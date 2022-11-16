@@ -1,18 +1,17 @@
-package com.dashboard.api.Entity;
+// package com.dashboard.api.Entity;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+// import javax.persistence.DiscriminatorValue;
+// import javax.persistence.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
+// import lombok.Getter;
+// import lombok.Setter;
 
-@Entity
-@Getter
-@Setter
-@DiscriminatorValue("Weather")
-public class Weather extends Widget {
+// @Entity
+// @Getter
+// @Setter
+// public class Weather extends Widget {
 
-    private String city;
+//     private String city;
 
-    private Boolean isCelsius;
-}
+//     private Boolean isCelsius;
+// }

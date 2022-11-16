@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dashboard.api.Entity.DashBoard;
+import com.dashboard.api.Entity.Widget;
 import com.dashboard.api.Error.DashboardResponseError;
+import com.dashboard.api.Model.Request.dashboard.GetDashboardWidgetsRequest;
 import com.dashboard.api.Request.DashBoardRequest;
 import com.dashboard.api.Request.DashboardAddWidgetRequest;
 import com.dashboard.api.Security.oauth2.user.DashboardUserPrincipal;
@@ -53,6 +55,16 @@ public class DashBoardController {
             List<DashBoard> dashboards = dashboardService.getUserDashboards(user.getId());
 
             return ResponseEntity.ok().body(dashboards);
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/get/widgets")
+    public ResponseEntity<?> getDashboardWidgets(@RequestBody GetDashboardWidgetsRequest request) {
+        try {
+            List<Widget> widgets = dashboardService.getDashboardWidgets(request.getDashboardId());
+            return ResponseEntity.ok().body(widgets);
         } catch (Exception ex) {
             return ResponseEntity.internalServerError().body(ex.getMessage());
         }

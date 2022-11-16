@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dashboard.api.Entity.DashBoard;
+import com.dashboard.api.Entity.WeatherWidget;
 import com.dashboard.api.Entity.Widget;
+import com.dashboard.api.Model.Request.widget.weather.CreateWeatherWidgetRequest;
 import com.dashboard.api.Repository.DashBoardRepository;
 import com.dashboard.api.Repository.WidgetRepository;
 import com.dashboard.api.Request.WidgetRequest;
@@ -75,5 +77,29 @@ public class WidgetService {
         this.widgetRepository.save(widget);
 
         return widget;
+    }
+
+    public WeatherWidget createWeatherWidget(Long dashboardId, String city, String unit, String size, Long refreshRate) throws Exception {
+        try {
+            Optional<DashBoard> optional = dashBoardRepository.findById(dashboardId);
+            if (!optional.isPresent()) {
+                throw new Exception("Dashboard not found");
+            }
+
+            DashBoard dashboard = optional.get();
+            WeatherWidget weatherWidget = new WeatherWidget();
+            weatherWidget.setCategory("WEATHER")
+                         .setCity(city)
+                         .setUnit(unit)
+                         .setSize(size)
+                         .setRefreshRate(refreshRate)
+                         .setDashBoard(dashboard);
+
+            widgetRepository.save(weatherWidget);
+
+            return weatherWidget;
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 }

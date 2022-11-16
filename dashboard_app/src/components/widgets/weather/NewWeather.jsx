@@ -4,17 +4,21 @@ import { LargeWeather } from "./LargeWeather";
 import * as ajax from "../../../lib/ajax";
 import { MediumWeather } from "./MediumWeather";
 import { SmallWeather } from "./SmallWeather";
+import { useGlobalState } from "../../../state";
 
-export const NewWeather = () => {
+export const NewWeather = ({dashboardId}) => {
+    const [accessToken, setAccessToken] = useGlobalState("ACCESS_TOKEN");
     const [size, setSize] = useState("");
     const [error, setError] = useState("");
-   // const [map, setMap] = useState({});
     const [city, setCity] = useState("City");
     const [temp, setTemp] = useState("Temperature");
-    const [unit, setUnit] = useState("Unit")
+    const [unit, setUnit] = useState("Unit");
+    const [refreshRate, setRefreshRate] = useState();
     const [weatherIcon, setWeatherIcon] = useState(null);
     const [weatherDesc, setWeatherDesc] = useState("Description");
     const [weatherBackground, setWeatherBackground] = useState(null);
+
+    console.log(dashboardId);
 
     const renderWidget = () => {
         if (error) {
@@ -34,23 +38,32 @@ export const NewWeather = () => {
     }
 
     const checkWeatherApi = () => {
-        ajax.getWeather("Paris", true, 1)
+        ajax.getWeather(accessToken, city, unit)
             .then((response) => {
-                setError(null)
-                let weather = response.data.weather[0];
-                console.log(weather)
-                setTemp(response.data.main.temp);
-                setWeatherDesc(weather.main);
-                setWeatherIcon(`/weather/icon/${weather.icon}.png`);
-                setWeatherBackground(`/weather/back/${weather.icon}.jpg`)
+                if (response.data.cod == 200) {
+                    console.log(response)
+                    setTemp(Math.round(response.data.main.temp))
+                    setWeatherDesc(response.data.weather[0].description)
+                    setWeatherIcon(response.data.weather[0].icon)
+                    setWeatherBackground(response.data.weather[0].icon)
+                    setError(null);
+                } else {
+                    setError("City not found. Please enter a valid city")
+                }
             })
             .catch((error) => {
                 setError("City not found. Please enter a valid city")
             })
     }
 
-    const submitForm = () => {
-        
+    const submitWidgetForm = () => {
+        ajax.newWeatherWidget(accessToken, dashboardId, city, unit, size, refreshRate)
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     return (
@@ -79,19 +92,27 @@ export const NewWeather = () => {
                             Large
                         </Button>
                     </Flex>
-                    <Flex w="30%" justifyContent="space-between">
-                        <Button onClick={() => setUnit("C°")}>
+                    <Flex w="30%" justifyContent="space-between" mb={6}>
+                        <Button onClick={() => setUnit("C")}>
                             Celcius
                         </Button>
                         <Button onClick={() => setUnit("F")}>
                             Fahrenheit
                         </Button>
                     </Flex>
+                    <Flex w="30%" justifyContent="space-between">
+                        <Button onClick={() => setRefreshRate(60 * 1000)}>
+                            1min
+                        </Button>
+                        <Button onClick={() => setRefreshRate(60 * 10 * 1000)}>
+                            10min
+                        </Button>
+                    </Flex>
                 </Flex>
                 {renderWidget()}
                 {
                     !error &&
-                    <Flex><Button colorScheme={"green"} onClick={() => submitForm()}>Submit</Button></Flex>
+                    <Flex><Button colorScheme={"green"} onClick={() => submitWidgetForm()}>Submit</Button></Flex>
                 }
             </form>
         </>
