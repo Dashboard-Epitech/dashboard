@@ -48,8 +48,6 @@ export const SmallWeather = ({city, unit, refreshRate}) => {
                 backgroundImage={data && data.widgetBackground ? `/weather/back/${data.widgetBackground}.jpg` : null} 
                 backgroundPosition="center" 
                 backgroundSize="cover" 
-                my={6} 
-                p={2} 
                 borderRadius={"20px"} 
                 color="white" 
             >

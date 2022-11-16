@@ -80,7 +80,7 @@ export const NewSpotify = ({ dashboardId }) => {
     }
 
     const renderWidget = () => {
-        if (widgetType == "track") {
+        if (widgetType == "TRACK") {
             if (size == "XL") {
                 return (
                     <LargeSpotifyTrack track={randomTrack} />
@@ -94,7 +94,7 @@ export const NewSpotify = ({ dashboardId }) => {
                     <SmallSpotifyTrack track={randomTrack} />
                 )
             }
-        } else if (widgetType == "playlist") {
+        } else if (widgetType == "PLAYLIST") {
             if (size == "XL") {
                 return (
                     <LargeSpotifyPlaylist playlist={playlist} />
@@ -113,7 +113,24 @@ export const NewSpotify = ({ dashboardId }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        ajax.createSpotifyWidget(accessToken, dashboardId,)
+        if (widgetType == "TRACK") {
+            ajax.createSpotifyWidget(accessToken, dashboardId, widgetType, size, randomTrack, null)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        } else if (widgetType == "PLAYLIST") {
+            ajax.createSpotifyWidget(accessToken, dashboardId, widgetType, size, null, playlist)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            }) 
+        }
+
     }
 
     if (!userSpotifyToken) {
@@ -149,8 +166,8 @@ export const NewSpotify = ({ dashboardId }) => {
                             }
                         </Flex>
                         <Flex w={"50%"} justifyContent={"space-between"} mb={6}>
-                            <Button onClick={() => { setWidgetType("track"); getRandomEminemTrack() }}>Random Eminem Track</Button>
-                            <Button onClick={() => { setWidgetType("playlist"); }}>Full Playlist</Button>
+                            <Button onClick={() => { setWidgetType("TRACK"); getRandomEminemTrack() }}>Random Eminem Track</Button>
+                            <Button onClick={() => { setWidgetType("PLAYLIST"); }}>Full Playlist</Button>
                         </Flex>
                         <Flex w="40%" justifyContent="space-between" mb={6}>
                             <Button onClick={() => { setSize("SM") }}>
