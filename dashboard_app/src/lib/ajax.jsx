@@ -35,7 +35,10 @@ export const getUserDashboards = (token) => {
 }
 
 export const getDashboardWidgets = (token, dashboardId) => {
-    return axios.get(BASE_URL + 'dashboard/get/widgets', {
+    return axios.post(BASE_URL + 'dashboard/get/widgets', 
+    {
+        dashboardId: dashboardId
+    }, {
         headers: {
             Authorization: `Bearer ${token}`
         }
